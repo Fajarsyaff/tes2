@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8">
+  <title>引継情報編集</title>
+  <link rel="stylesheet" href="/css/style.css">
+</head>
+<body>
+  <h1>引継情報編集</h1>
+
+  <div class="progress-bar">
+    ステータス: <strong>所属長確認待ち</strong>
+  </div>
+
+  <section>
+    <h2 onclick="this.nextElementSibling.classList.toggle('hidden')">▶ 関与先情報</h2>
+    <div>
+      <label>商号: <input type="text" name="s_name"></label><br>
+      <label>住所: <input type="text" name="s_address"></label>
+    </div>
+
+    <h2 onclick="this.nextElementSibling.classList.toggle('hidden')">▶ 監査情報</h2>
+    <div class="hidden">
+      <label>監査完了年月: <input type="date" name="dt_completed"></label><br>
+      <label>監査場所: 
+        <select>
+          <option>事務所</option>
+          <option>現地</option>
+          <option>その他</option>
+        </select>
+      </label>
+    </div>
+  </section>
+
+  <button>提出</button>
+</body>
+</html>

@@ -1,0 +1,114 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>監査業務引継書 - ホーム画面</title>
+  <link rel="stylesheet" href="style.css">
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      background-color: #f4f4f4;
+      margin: 0;
+      padding: 20px;
+    }
+    header {
+      background-color: #2c3e50;
+      color: white;
+      padding: 10px 20px;
+      font-size: 1.5em;
+    }
+    .container {
+      background: white;
+      padding: 20px;
+      border-radius: 8px;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+    }
+    .search-bar label {
+      display: block;
+      margin-top: 10px;
+    }
+    .search-bar input, .search-bar select {
+      width: 100%;
+      padding: 8px;
+      margin-top: 4px;
+      margin-bottom: 10px;
+    }
+    .btn {
+      background-color: #3498db;
+      color: white;
+      padding: 10px 15px;
+      border: none;
+      border-radius: 4px;
+      cursor: pointer;
+    }
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      margin-top: 20px;
+    }
+    th, td {
+      border: 1px solid #ccc;
+      padding: 8px;
+      text-align: left;
+    }
+    th {
+      background-color: #ecf0f1;
+    }
+  </style>
+</head>
+<body>
+  <header>監査業務引継書 - ホーム画面</header>
+  <div class="container">
+    <div class="search-bar">
+      <label for="inCharge">担当者（前任者）:</label>
+      <input type="text" id="inCharge" name="inCharge">
+
+      <label for="status">ステータス:</label>
+      <select id="status" name="status">
+        <option value="all">すべて</option>
+        <option value="supervisor">所属長確認待ち</option>
+        <option value="manager">部長確認待ち</option>
+        <option value="director">取締役確認待ち</option>
+        <option value="senior_director">常務確認待ち</option>
+        <option value="vice_president">専務確認待ち</option>
+        <option value="president">社長確認待ち</option>
+        <option value="general_affairs">総務確認待ち</option>
+        <option value="completed">確認完了</option>
+      </select>
+
+      <label for="keyword">キーワード検索:</label>
+      <input type="text" id="keyword" name="keyword" placeholder="商号、代表者名、住所など">
+
+      <button class="btn">検索</button>
+      <button class="btn" style="background-color: #2ecc71;">新規作成</button>
+    </div>
+
+    <table>
+      <thead>
+        <tr>
+          <th>提出日</th>
+          <th>関与先CD</th>
+          <th>商号</th>
+          <th>代表者名</th>
+          <th>報酬金額計</th>
+          <th>前任者</th>
+          <th>ステータス</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td>2025/05/01</td>
+          <td>TKC123456</td>
+          <td>株式会社テスト</td>
+          <td>山田 太郎</td>
+          <td>¥500,000</td>
+          <td>田中 次郎</td>
+          <td>部長確認待ち</td>
+        </tr>
+        <!-- Tambahkan baris lainnya sesuai data -->
+      </tbody>
+    </table>
+  </div>
+</body>
+</html>
