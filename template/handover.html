@@ -6,109 +6,397 @@
   <title>監査業務引継書 - ホーム画面</title>
   <link rel="stylesheet" href="style.css">
   <style>
+    /* Reset and Base Styles */
     body {
-      font-family: Arial, sans-serif;
-      background-color: #f4f4f4;
+      font-family: 'Arial', sans-serif;
       margin: 0;
-      padding: 20px;
+      padding: 0;
+      color: #333;
+      background-color: #f8f9fa;
     }
-    header {
+    
+    /* Header and Navigation */
+    .header-nav-container {
+      display: flex;
       background-color: #2c3e50;
       color: white;
-      padding: 10px 20px;
-      font-size: 1.5em;
     }
-    .container {
-      background: white;
+    
+    .logo {
+      padding: 15px 20px;
+      font-weight: bold;
+      font-size: 1.2rem;
+      background-color: #1a252f;
+    }
+    
+    .nav-menu {
+      display: flex;
+      list-style-type: none;
+      margin: 0;
+      padding: 0;
+    }
+    
+    .nav-item {
+      padding: 15px 20px;
+      cursor: pointer;
+      transition: background-color 0.3s;
+    }
+    
+    .nav-item:hover {
+      background-color: #34495e;
+    }
+    
+    .nav-item.active {
+      background-color: #3498db;
+    }
+    
+    .user-info {
+      margin-left: auto;
+      padding: 15px 20px;
+      display: flex;
+      align-items: center;
+    }
+    
+    .user-name {
+      margin-right: 10px;
+    }
+    
+    .user-avatar {
+      width: 30px;
+      height: 30px;
+      border-radius: 50%;
+      background-color: #ecf0f1;
+      color: #2c3e50;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-weight: bold;
+    }
+    
+    /* Page Header Styles */
+    .page-header {
+      background-color: #fff;
+      padding: 15px 20px;
+      border-bottom: 1px solid #eee;
+    }
+    
+    .page-title {
+      font-size: 1.5rem;
+      font-weight: bold;
+      margin: 0;
+      color: #333;
+    }
+    
+    .subtitle {
+      font-size: 0.9rem;
+      color: #666;
+      margin: 5px 0 0 0;
+    }
+    
+    /* Main Container */
+    .main-container {
       padding: 20px;
+      max-width: 1400px;
+      margin: 0 auto;
+    }
+    
+    /* Combined Card for Filters and Table */
+    .data-card {
+      background-color: #fff;
       border-radius: 8px;
       box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+      overflow: hidden;
     }
-    .search-bar label {
+    
+    /* Filter Section */
+    .filter-section {
+      padding: 15px 20px;
+      border-bottom: 1px solid #eee;
+    }
+    
+    .filter-row {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 15px;
+      margin-bottom: 10px;
+      align-items: flex-end;
+    }
+    
+    .filter-group {
+      min-width: 180px;
+      flex: 1 0 auto;
+    }
+    
+    .filter-group.small {
+      flex: 0 0 150px;
+    }
+    
+    .filter-group.medium {
+      flex: 0 0 200px;
+    }
+    
+    .filter-group.large {
+      flex: 0 0 250px;
+    }
+    
+    .filter-group label {
       display: block;
+      margin-bottom: 5px;
+      font-weight: bold;
+      font-size: 0.8rem;
+    }
+    
+    .filter-group input,
+    .filter-group select {
+      width: 100%;
+      padding: 6px 10px;
+      border: 1px solid #ddd;
+      border-radius: 4px;
+      font-size: 0.85rem;
+      height: 34px;
+      box-sizing: border-box;
+    }
+    
+    .button-group {
+      display: flex;
+      gap: 10px;
       margin-top: 10px;
     }
-    .search-bar input, .search-bar select {
-      width: 100%;
-      padding: 8px;
-      margin-top: 4px;
-      margin-bottom: 10px;
-    }
+    
     .btn {
-      background-color: #3498db;
-      color: white;
-      padding: 10px 15px;
+      padding: 6px 12px;
       border: none;
       border-radius: 4px;
       cursor: pointer;
+      font-size: 0.85rem;
+      transition: background-color 0.2s;
+      height: 34px;
     }
+    
+    .btn-search {
+      background-color: #3498db;
+      color: white;
+    }
+    
+    .btn-create {
+      background-color: #2ecc71;
+      color: white;
+    }
+    
+    .btn:hover {
+      opacity: 0.9;
+    }
+    
+    /* Table Section */
+    .table-section {
+      overflow-x: auto;
+    }
+    
     table {
       width: 100%;
       border-collapse: collapse;
-      margin-top: 20px;
+      font-size: 0.85rem;
     }
-    th, td {
-      border: 1px solid #ccc;
-      padding: 8px;
-      text-align: left;
-    }
+    
     th {
-      background-color: #ecf0f1;
+      background-color: #f1f5f9;
+      padding: 10px 12px;
+      text-align: left;
+      font-weight: bold;
+      color: #333;
+      border-bottom: 2px solid #ddd;
+      white-space: nowrap;
+    }
+    
+    td {
+      padding: 10px 12px;
+      border-bottom: 1px solid #eee;
+      white-space: nowrap;
+    }
+    
+    tr:hover {
+      background-color: #f8f9fa;
+    }
+    
+    .status-pending {
+      color: #e67e22;
+    }
+    
+    .status-completed {
+      color: #2ecc71;
+    }
+    
+    .status-rejected {
+      color: #e74c3c;
+    }
+    
+    /* Pagination Info */
+    .pagination-info {
+      padding: 12px 15px;
+      font-size: 0.8rem;
+      color: #666;
+      text-align: right;
+      border-top: 1px solid #eee;
     }
   </style>
 </head>
 <body>
-  <header>監査業務引継書 - ホーム画面</header>
-  <div class="container">
-    <div class="search-bar">
-      <label for="inCharge">担当者（前任者）:</label>
-      <input type="text" id="inCharge" name="inCharge">
-
-      <label for="status">ステータス:</label>
-      <select id="status" name="status">
-        <option value="all">すべて</option>
-        <option value="supervisor">所属長確認待ち</option>
-        <option value="manager">部長確認待ち</option>
-        <option value="director">取締役確認待ち</option>
-        <option value="senior_director">常務確認待ち</option>
-        <option value="vice_president">専務確認待ち</option>
-        <option value="president">社長確認待ち</option>
-        <option value="general_affairs">総務確認待ち</option>
-        <option value="completed">確認完了</option>
-      </select>
-
-      <label for="keyword">キーワード検索:</label>
-      <input type="text" id="keyword" name="keyword" placeholder="商号、代表者名、住所など">
-
-      <button class="btn">検索</button>
-      <button class="btn" style="background-color: #2ecc71;">新規作成</button>
+  <!-- Navigation Bar -->
+  <div class="header-nav-container">
+    <div class="logo">監査システム</div>
+    <ul class="nav-menu">
+      <li class="nav-item active">ホーム</li>
+      <li class="nav-item">顧客管理</li>
+      <li class="nav-item">レポート</li>
+      <li class="nav-item">設定</li>
+    </ul>
+    <div class="user-info">
+      <span class="user-name">山田太郎</span>
+      <div class="user-avatar">Y</div>
     </div>
-
-    <table>
-      <thead>
-        <tr>
-          <th>提出日</th>
-          <th>関与先CD</th>
-          <th>商号</th>
-          <th>代表者名</th>
-          <th>報酬金額計</th>
-          <th>前任者</th>
-          <th>ステータス</th>
-        </tr>
-      </thead>
-      <tbody>
-        <tr>
-          <td>2025/05/01</td>
-          <td>TKC123456</td>
-          <td>株式会社テスト</td>
-          <td>山田 太郎</td>
-          <td>¥500,000</td>
-          <td>田中 次郎</td>
-          <td>部長確認待ち</td>
-        </tr>
-        <!-- Tambahkan baris lainnya sesuai data -->
-      </tbody>
-    </table>
+  </div>
+  
+  <!-- Main Content -->
+  <div class="main-container">
+    <!-- Combined Card for Filters and Table -->
+    <div class="data-card">
+      <div class="page-header">
+        <h3 class="page-title">ホーム</h3>
+        <!-- <p class="subtitle">Active Members</p> -->
+      </div>
+      
+      <!-- Filter Section -->
+      <div class="filter-section">
+        <div class="filter-row">
+          <div class="filter-group medium">
+            <label for="inCharge">担当者（前任者）</label>
+            <input type="text" id="inCharge" name="inCharge">
+          </div>
+          
+          <div class="filter-group medium">
+            <label for="status">ステータス</label>
+            <select id="status" name="status">
+              <option value="all">すべて</option>
+              <option value="supervisor">所属長確認待ち</option>
+              <option value="manager">部長確認待ち</option>
+              <option value="director">取締役確認待ち</option>
+              <option value="senior_director">常務確認待ち</option>
+              <option value="vice_president">専務確認待ち</option>
+              <option value="president">社長確認待ち</option>
+              <option value="general_affairs">総務確認待ち</option>
+              <option value="completed">確認完了</option>
+            </select>
+          </div>
+          
+          <div class="filter-group large">
+            <label for="keyword">キーワード検索</label>
+            <input type="text" id="keyword" name="keyword" placeholder="商号、代表者名、住所など">
+          </div>
+        </div>
+        
+        <div class="button-group">
+          <button class="btn btn-search">検索</button>
+          <button class="btn btn-create">新規作成</button>
+        </div>
+      </div>
+      
+      <!-- Table Section -->
+      <div class="table-section">
+        <table>
+          <thead>
+            <tr>
+              <th>提出日</th>
+              <th>関与先CD</th>
+              <th>関与先商号</th>
+              <th>代表者名</th>
+              <th>機械全選計</th>
+              <th>前任者名</th>
+              <th>ステータス</th>
+              <th>アクション</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td>2024-03-15</td>
+              <td>CL-10023</td>
+              <td>株式会社トヨタ商事</td>
+              <td>田中一郎</td>
+              <td>1,250,000</td>
+              <td>佐藤 英実</td>
+              <td class="status-pending">所属長確認待ち</td>
+              <td>
+                <button class="btn" style="padding: 4px 8px; font-size: 0.75rem;">編集</button>
+              </td>
+            </tr>
+            <tr>
+              <td>2024-03-14</td>
+              <td>CL-10045</td>
+              <td>株式会社ソフトバンク</td>
+              <td>山本 裕子</td>
+              <td>980,000</td>
+              <td>鈴木 健太</td>
+              <td class="status-pending">部長確認待ち</td>
+              <td>
+                <button class="btn" style="padding: 4px 8px; font-size: 0.75rem;">編集</button>
+              </td>
+            </tr>
+            <tr>
+              <td>2024-03-12</td>
+              <td>CL-10089</td>
+              <td>株式会社日立製作所</td>
+              <td>伊藤 正雄</td>
+              <td>2,300,000</td>
+              <td>高橋 浩子</td>
+              <td class="status-completed">確認完了</td>
+              <td>
+                <button class="btn" style="padding: 4px 8px; font-size: 0.75rem;">編集</button>
+              </td>
+            </tr>
+            <tr>
+              <td>2024-03-10</td>
+              <td>CL-1012</td>
+              <td>株式会社パナソニック</td>
+              <td>渡辺 翔太</td>
+              <td>1,750,000</td>
+              <td>中村 優子</td>
+              <td class="status-rejected">差し戻し</td>
+              <td>
+                <button class="btn" style="padding: 4px 8px; font-size: 0.75rem;">編集</button>
+              </td>
+            </tr>
+            <tr>
+              <td>2024-03-08</td>
+              <td>CL-10134</td>
+              <td>株式会社三菱UFJ銀行</td>
+              <td>小林 恵</td>
+              <td>3,420,000</td>
+              <td>吉田 拓也</td>
+              <td class="status-pending">常務確認待ち</td>
+              <td>
+                <button class="btn" style="padding: 4px 8px; font-size: 0.75rem;">編集</button>
+              </td>
+            </tr>
+            <tr>
+              <td>2024-03-05</td>
+              <td>CL-10156</td>
+              <td>株式会社NTTドコモ</td>
+              <td>加藤 貴一</td>
+              <td>890,000</td>
+              <td>山田 陽子</td>
+              <td class="status-pending">取締役確認待ち</td>
+              <td>
+                <button class="btn" style="padding: 4px 8px; font-size: 0.75rem;">編集</button>
+              </td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+      
+      <!-- Pagination Info -->
+      <div class="pagination-info">
+        Showing data 1 to 8 of 256K entries
+      </div>
+    </div>
   </div>
 </body>
 </html>
