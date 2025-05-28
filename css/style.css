@@ -1,71 +1,349 @@
+/* /css/style.css */
+
+/* Basic Reset and Global Font */
+body, h1, h2, h3, p, ul, li, table, form, button, input, select, textarea, details, summary {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
 body {
-  font-family: 'Segoe UI', sans-serif;
-  background-color: #f7f9fb;
-  margin: 0;
-  padding: 20px;
-  color: #333;
+    font-family: 'Segoe UI', Meiryo, 'Hiragino Kaku Gothic ProN', sans-serif; /* Common Japanese UI fonts */
+    line-height: 1.6;
+    background-color: #f0f2f5; /* Light grey background for the page */
+    color: #333; /* Default text color */
+    font-size: 14px; /* Base font size */
 }
 
-h1 {
-  background-color: #2c3e50;
-  color: white;
-  padding: 10px;
-  margin-bottom: 20px;
+/* Main Site Header */
+.site-header {
+    background-color: #343a40; /* Dark header background color */
+    color: white; /* Header text color */
+    padding: 0.75rem 1.5rem; /* Vertical and horizontal padding */
+    display: flex; /* Enable flexbox for layout */
+    justify-content: space-between; /* Space out title and user info */
+    align-items: center; /* Align items vertically */
+    box-shadow: 0 2px 4px rgba(0,0,0,0.1); /* Subtle shadow for depth */
 }
 
-h2 {
-  background-color: #ecf0f1;
-  padding: 10px;
-  cursor: pointer;
-  margin-top: 20px;
-  border-left: 5px solid #3498db;
+.site-header .header-title {
+    font-size: 1.25rem; /* Font size for the main system title */
+    font-weight: 500; /* Medium font weight */
 }
 
-h2:hover {
-  background-color: #dce4ea;
+.site-header .user-info {
+    display: flex; /* Align user name and logout link */
+    align-items: center;
+    font-size: 0.875rem; /* Smaller font for user info */
 }
 
-.hidden {
-  display: none;
+.site-header .user-info #loggedInUserName {
+    margin-right: 1.5rem; /* Space between user name and logout button */
 }
 
-section div {
-  background: #fff;
-  border: 1px solid #ddd;
-  padding: 15px;
-  margin-bottom: 10px;
+.site-header .logout-link, .site-header .logout-link:visited {
+    color: #adb5bd; /* Slightly muted color for logout link */
+    text-decoration: none; /* Remove underline from link */
+    display: inline-flex; /* Align icon and text */
+    align-items: center;
+}
+.site-header .logout-link:hover {
+    color: #f8f9fa; /* Lighter color on hover */
+}
+.site-header .logout-link .fas {
+    margin-right: 0.3rem; /* Space between icon and logout text */
 }
 
-label {
-  display: block;
-  margin-bottom: 10px;
+/* Main Content Container on the Page */
+.container {
+    max-width: 100%; /* Allow full width usage within browser viewport */
+    padding: 20px; /* Padding around the main content area */
+    margin: 0 auto; /* Center container if max-width is set to a fixed value later */
 }
 
-input, select {
-  padding: 6px;
-  font-size: 14px;
-  width: 300px;
-  max-width: 90%;
-  margin-top: 5px;
+/* Main Content Card for the Home Page */
+.main-content-card {
+    background-color: #ffffff; /* White background for the card */
+    padding: 1.5rem; /* Internal padding for the card */
+    border-radius: 1.5rem;
+    box-shadow: 0 0 15px rgba(0,0,0,0.07); /* Soft shadow for the card */
 }
 
-button {
-  background-color: #3498db;
-  color: white;
-  padding: 10px 20px;
-  border: none;
-  font-size: 14px;
-  cursor: pointer;
-  margin-top: 20px;
+/* Page Title Bar (Home icon, Title, Global Search) inside the main card */
+.main-content-card .page-title-bar {
+    display: flex; /* Use flexbox to layout title and search */
+    justify-content: space-between; /* Space out title and search */
+    align-items: center; /* Vertically align items */
+    margin-bottom: 0.5rem; /* Smaller margin to the subtitle */
+    /* background-color, padding, border, box-shadow are removed as it's now part of the main card */
 }
 
-button:hover {
-  background-color: #2980b9;
+.main-content-card .page-title-bar h1 {
+    font-size: 1.75rem; /* Larger font size for "ホーム" */
+    color: #343a40; /* Dark text color for the title */
+    display: flex; /* Align icon and title text */
+    align-items: center;
+    font-weight: 500; /* Medium font weight */
+}
+.main-content-card .page-title-bar h1 .fas { /* Home icon */
+    margin-right: 0.75rem; /* Space between icon and title text */
+    color: #007bff; /* Blue color for the home icon */
 }
 
-.progress-bar {
-  background: #dfe6e9;
-  padding: 10px;
-  border-left: 6px solid #27ae60;
-  margin-bottom: 20px;
+.main-content-card .global-search-container {
+    position: relative; /* For positioning the search icon inside the input */
+    display: flex;
+    align-items: center;
+}
+
+.main-content-card .global-search-container .search-icon-input {
+    position: absolute; /* Position icon inside the input field */
+    left: 10px; /* Indent icon from the left */
+    color: #adb5bd; /* Muted color for the search icon */
+    font-size: 0.9rem;
+}
+
+.main-content-card .global-search-container #globalSearch {
+    padding: 0.5rem 0.75rem 0.5rem 2.25rem; /* Left padding for the icon */
+    border: 1px solid #ced4da; /* Standard border */
+    border-radius: 0.25rem; /* Rounded corners for input */
+    min-width: 250px; /* Minimum width for the search input */
+    font-size: 0.9rem;
+}
+
+/* Page Subtitle (e.g., "申請一覧") inside the main card */
+.main-content-card .page-subtitle {
+    font-size: 1rem; /* Font size for the subtitle */
+    color: #6c757d; /* Muted text color */
+    margin-bottom: 1.5rem; /* Space below the subtitle */
+    /* padding-left is removed as it's now aligned by the main card's padding */
+}
+
+/* Action Bar (New Button, Right-side Filters) inside the main card */
+.main-content-card .action-bar {
+    display: flex; /* Use flexbox for layout */
+    justify-content: space-between; /* Space out new button and right filters */
+    align-items: center; /* Vertically align items */
+    margin-bottom: 1.5rem; /* Space below the action bar */
+    /* padding: 0; /* Remove padding if handled by main-content-card */
+}
+
+.main-content-card .action-bar .btn-primary {
+    background-color: #007bff; /* Blue for primary button */
+    border-color: #007bff;
+    color: white;
+    padding: 0.6rem 1.2rem; /* Button padding */
+    font-size: 0.9rem;
+}
+.main-content-card .action-bar .btn-primary:hover {
+    background-color: #0069d9; /* Darker blue on hover */
+    border-color: #0062cc;
+}
+.main-content-card .action-bar .btn-primary .fas {
+    margin-right: 0.5rem; /* Space between icon and button text */
+}
+
+.main-content-card .filters-right {
+    display: flex; /* Layout right-side filters horizontally */
+    gap: 1rem; /* Space between filter dropdowns */
+}
+
+.main-content-card .filters-right .filter-group select {
+    padding: 0.6rem 0.75rem; /* Dropdown padding */
+    border: 1px solid #ced4da; /* Standard border */
+    /* Sesuaikan border-radius select */
+    border-radius: 0.5rem; /* Contoh: lebih tumpul */
+    min-width: 200px; /* Minimum width for dropdowns */
+    font-size: 0.9rem;
+    background-color: #fff; /* White background for select */
+}
+
+/* Table Filters (Predecessor, Keyword, etc.) inside the main card */
+.main-content-card .table-filters {
+    display: grid; /* Use grid for flexible filter layout */
+    grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); /* Responsive columns */
+    gap: 1rem 1.5rem; /* Row and column gap */
+    padding: 1.25rem; /* Internal padding for the filter area */
+    background-color:rgb(255, 255, 255); /* Slightly different background for filter section */
+    border-radius: 1rem; 
+    margin-bottom: 1.5rem; /* Space below filters, before table meta */
+}
+
+.main-content-card .table-filters .filter-group label {
+    display: block; /* Labels on their own line */
+    margin-bottom: 0.3rem; /* Space below label */
+    font-weight: 600; /* Bold labels */
+    font-size: 0.85rem;
+    color: #495057; /* Dark grey label text */
+}
+.main-content-card .table-filters .filter-group label .fas { /* Icons in filter labels */
+    margin-right: 0.4rem;
+    color: #6c757d; /* Muted color for label icons */
+}
+
+.main-content-card .table-filters .filter-group input[type="text"],
+.main-content-card .table-filters .filter-group input[type="search"] {
+    width: 100%; /* Full width inputs */
+    padding: 0.6rem 0.75rem; /* Input padding */
+    border: 1px solid #ced4da; /* Standard border */
+    border-radius: 0.25rem; /* Rounded corners */
+    font-size: 0.9rem;
+}
+
+.main-content-card .table-filters .filter-group.checkbox-group {
+    display: flex; /* Align checkbox and label horizontally */
+    align-items: center;
+    gap: 0.5rem; /* Space between checkbox and label */
+    grid-column: 1 / -1; /* Allow checkbox group to span full width if needed */
+    margin-top: 0.5rem; /* Align with other filter items */
+}
+.main-content-card .table-filters .filter-group.checkbox-group label {
+    margin-bottom: 0; /* Remove bottom margin for checkbox label */
+    font-weight: normal; /* Normal font weight for checkbox label */
+}
+
+.main-content-card .table-filters .filter-group .btn-secondary { /* Apply Filters button */
+    background-color: #6c757d; /* Grey for secondary button */
+    border-color: #6c757d;
+    color: white;
+    padding: 0.6rem 1.2rem; /* Button padding */
+    font-size: 0.9rem;
+    width: 100%; /* Full width button within its grid cell */
+    margin-top: 1.7rem; /* Align button vertically if labels are above inputs */
+}
+.main-content-card .table-filters .filter-group .btn-secondary:hover {
+    background-color: #5a6268; /* Darker grey on hover */
+    border-color: #545b62;
+}
+.main-content-card .table-filters .filter-group .btn-secondary .fas {
+    margin-right: 0.5rem; /* Space for icon in button */
+}
+
+/* Table Meta Information (Row count, Sort options) inside the main card */
+.main-content-card .table-meta {
+    display: flex; /* Use flexbox for layout */
+    justify-content: space-between; /* Space out row count and sort options */
+    align-items: center; /* Vertically align items */
+    padding: 0.75rem 0; /* Vertical padding, horizontal padding handled by main card */
+    font-size: 0.875rem; /* Smaller font for meta info */
+    color: #6c757d; /* Muted text color */
+}
+
+.main-content-card .table-meta .sort-options label {
+    font-weight: normal; /* Normal font weight for sort label */
+    margin-right: 0.5rem;
+    color: #495057; /* Darker text for sort label */
+}
+.main-content-card .table-meta .sort-options label .fas { /* Sort icon in label */
+    margin-right: 0.3rem;
+}
+.main-content-card .table-meta .sort-options select {
+    padding: 0.4rem 0.6rem; /* Padding for sort dropdown */
+    border: 1px solid #ced4da; /* Standard border */
+    border-radius: 0.25rem; /* Rounded corners */
+    font-size: 0.875rem;
+}
+
+/* Table Responsive Wrapper and Table Styling inside the main card */
+.main-content-card .table-responsive-wrapper {
+    overflow-x: auto; /* Enable horizontal scroll for table on small screens */
+}
+
+#handoverListTable {
+    width: 100%; /* Full width table */
+    border-collapse: collapse; /* Collapse borders */
+    margin-top: 0; /* No top margin if .table-meta is present */
+}
+#handoverListTable th, #handoverListTable td {
+    border: 1px solid #dee2e6; /* Cell borders */
+    padding: 0.75rem 1rem; /* Cell padding */
+    text-align: left; /* Align text to the left */
+    vertical-align: middle; /* Align content vertically in the middle */
+    font-size: 0.875rem; /* Font size for table content */
+}
+#handoverListTable thead th {
+    background-color: #f8f9fa; /* Light grey background for table header */
+    font-weight: 600; /* Bold header text */
+    color: #495057; /* Dark grey header text */
+}
+#handoverListTable thead th .decorative-icon { /* Decorative icons in table headers */
+    margin-right: 0.5rem;
+    color: #6c757d; /* Muted color for decorative icons */
+    font-size: 0.9em;
+}
+#handoverListTable thead th .sort-icon { /* Sort icons in table headers */
+    margin-left: 0.3rem;
+    color: #adb5bd; /* Muted color for sort icons */
+    font-size: 0.8em;
+    /* cursor: pointer; /* Add if sort icons are clickable */
+}
+
+#handoverListTable tbody tr:hover {
+    background-color: #e9ecef; /* Lighter background on row hover for better UX */
+}
+#handoverListTable .action-view .fas { /* View action icon */
+    color: #007bff; /* Blue color for view icon */
+    font-size: 1.1rem; /* Size of the view icon */
+}
+#handoverListTable .action-view:hover .fas {
+    color: #0056b3; /* Darker blue on hover */
+}
+
+/* Pagination Controls inside the main card */
+.main-content-card .pagination-controls {
+    display: flex; /* Use flexbox for layout */
+    justify-content: flex-end; /* Align pagination to the right */
+    align-items: center; /* Vertically align items */
+    padding: 1rem 0 0 0; /* Top padding, no bottom padding if it's the last element */
+    gap: 0.3rem; /* Space between pagination buttons */
+}
+.pagination-controls button {
+    background-color: #fff; /* White background for buttons */
+    border: 1px solid #dee2e6; /* Standard border */
+    color: #007bff; /* Blue text color */
+    padding: 0.375rem 0.75rem; /* Button padding */
+    text-decoration: none; /* Remove underline */
+    font-size: 0.875rem;
+    cursor: pointer; /* Pointer cursor */
+    /* Sesuaikan border-radius tombol pagination */
+    border-radius: 0.5rem; /* Contoh: lebih tumpul */
+}
+.pagination-controls button:hover {
+    background-color: #e9ecef; /* Light grey background on hover */
+}
+.pagination-controls button.active { /* Active page button */
+    background-color: #007bff; /* Blue background */
+    color: white; /* White text */
+    border-color: #007bff; /* Blue border */
+}
+.pagination-controls button:disabled { /* Disabled page button */
+    color: #6c757d; /* Muted text color */
+    cursor: not-allowed; /* Not-allowed cursor */
+    background-color: #e9ecef; /* Light grey background */
+}
+.pagination-controls span { /* For "..." in pagination */
+    padding: 0.375rem 0.75rem;
+    color: #6c757d; /* Muted text color */
+}
+
+/* Error message styling within the table */
+#handoverListTable td[colspan="8"] { /* Ensure colspan matches your table's column count */
+    padding: 2rem; /* More padding for messages */
+    color: #dc3545; /* Red color for error messages */
+    font-style: italic; /* Italicize message text */
+    text-align: center; /* Center the message */
+}
+
+.btn {
+    padding: 0.5rem 1rem;
+    font-size: 0.9rem;
+    /* Sesuaikan border-radius tombol */
+    border-radius: 0.5rem; /* Contoh: lebih tumpul */
+    border: 1px solid transparent;
+    cursor: pointer;
+    text-decoration: none;
+    display: inline-flex;
+    align-items: center;
+    gap: 0.3rem; /* Jarak antara ikon dan teks */
+    transition: background-color 0.15s ease-in-out, border-color 0.15s ease-in-out, color 0.15s ease-in-out;
 }

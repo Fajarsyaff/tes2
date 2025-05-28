@@ -1,37 +1,110 @@
 <!DOCTYPE html>
 <html lang="ja">
 <head>
-  <meta charset="UTF-8">
-  <title>引継情報編集</title>
-  <link rel="stylesheet" href="/css/style.css">
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>監査業務引継書 - 作成・編集</title>
+    <link rel="stylesheet" href="../css/style.css">
+    <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined" rel="stylesheet" />
 </head>
-<body>
-  <h1>引継情報編集</h1>
+<body id="page-edit"> <header>
+        <h1>監査業務引継書システム</h1>
+        <a href="handover.html" class="btn-back-to-list">
+            <span class="material-symbols-outlined" style="font-size: 1em; vertical-align: middle;">arrow_back</span> 一覧へ戻る
+        </a>
+    </header>
 
-  <div class="progress-bar">
-    ステータス: <strong>所属長確認待ち</strong>
-  </div>
+    <main class="container">
+        <section class="page-header">
+            <h2 id="editPageTitle">引継ぎ情報 作成</h2> </section>
 
-  <section>
-    <h2 onclick="this.nextElementSibling.classList.toggle('hidden')">▶ 関与先情報</h2>
-    <div>
-      <label>商号: <input type="text" name="s_name"></label><br>
-      <label>住所: <input type="text" name="s_address"></label>
-    </div>
+        <section id="progressBarContainer" class="progress-bar-container card">
+            <div class="progress-segment">読み込み中...</div>
+        </section>
 
-    <h2 onclick="this.nextElementSibling.classList.toggle('hidden')">▶ 監査情報</h2>
-    <div class="hidden">
-      <label>監査完了年月: <input type="date" name="dt_completed"></label><br>
-      <label>監査場所: 
-        <select>
-          <option>事務所</option>
-          <option>現地</option>
-          <option>その他</option>
-        </select>
-      </label>
-    </div>
-  </section>
+        <form id="handoverEditForm" class="card">
+            <details class="form-collapsible-section" open>
+                <summary><span class="material-symbols-outlined">expand_more</span> 関与先情報</summary>
+                <div class="section-content form-grid">
+                    <div class="form-group readonly-group">
+                        <label>顧客ID</label>
+                        <p id="s_customer_display" class="readonly-text">（新規作成時は自動生成）</p>
+                    </div>
+                    <div class="form-group">
+                        <label for="id_tkc_cd_1">関与先CD</label>
+                        <div class="kanyo-saki-cd-group">
+                            <input type="text" id="id_tkc_cd_1" name="id_tkc_cd_1" maxlength="5" pattern="\d{5}" placeholder="00000">
+                            <span class="hyphen">-</span>
+                            <input type="text" id="id_tkc_cd_2" name="id_tkc_cd_2" maxlength="3" pattern="\d{3}" placeholder="000">
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label for="s_name">関与先_商号</label>
+                        <input type="text" id="s_name" name="s_name" required>
+                    </div>
+                    </div> </details>
 
-  <button>提出</button>
+            <details class="form-collapsible-section">
+                <summary><span class="material-symbols-outlined">expand_more</span> 構成・特徴</summary>
+                <div class="section-content form-grid">
+                    <div class="form-group">
+                        <label for="s_rep_name">代表者氏名</label>
+                        <input type="text" id="s_rep_name" name="s_rep_name" required>
+                    </div>
+                    <div class="form-group full-width"> <label for="s_rep_personal">代表者性格・人柄等</label>
+                        <textarea id="s_rep_personal" name="s_rep_personal" rows="3" required></textarea>
+                    </div>
+                    </div>
+            </details>
+
+            <details class="form-collapsible-section" id="approvalSection">
+                <summary><span class="material-symbols-outlined">expand_more</span> 承認状況・担当設定</summary>
+                <div class="section-content">
+                    <h4>承認履歴</h4>
+                    <div id="approvalHistory" class="approval-history-log">
+                        <p>履歴はありません。</p>
+                    </div>
+                    <hr>
+                    <h4>担当者設定・現在の承認アクション</h4>
+                    <div class="form-grid">
+                        <div class="form-group">
+                            <label for="s_predecessor_display">前任者ID (作成者)</label>
+                             <p id="s_predecessor_display" class="readonly-text">（ログインユーザー）</p>
+                             <input type="hidden" id="s_predecessor" name="s_predecessor">
+                        </div>
+                        <div class="form-group">
+                            <label for="s_superior">所属長ID (承認者)</label>
+                            <input type="search" id="s_superior" name="s_superior" list="data-worker" placeholder="所属長を選択・検索" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="s_in_charge">後任者ID (引継ぎ先)</label>
+                            <input type="search" id="s_in_charge" name="s_in_charge" list="data-worker" placeholder="後任者を選択・検索">
+                        </div>
+                        <div class="form-group full-width" id="currentApproverCommentGroup" style="display:none;">
+                            <label for="current_approval_comment">コメント</label>
+                            <textarea id="current_approval_comment" name="current_approval_comment" rows="3" placeholder="承認または否認の理由を記入"></textarea>
+                        </div>
+                    </div>
+                    <div id="approvalActionButtons" class="form-actions" style="margin-top:10px; display:none;">
+                        </div>
+                </div>
+            </details>
+
+            <div class="main-form-actions form-actions">
+                <button type="button" id="btnCancelEdit" class="btn btn-secondary">キャンセル</button>
+                <button type="submit" id="btnSubmitHandover" class="btn btn-primary">提出</button>
+                </div>
+        </form>
+    </main>
+
+    <footer>
+        </footer>
+
+    <datalist id="data-worker">
+        </datalist>
+
+    <script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
+    <script src="../js/global_constants.js"></script>
+    <script src="../js/script.js"></script>
 </body>
 </html>

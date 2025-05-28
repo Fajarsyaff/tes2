@@ -1,37 +1,69 @@
 <!DOCTYPE html>
 <html lang="ja">
 <head>
-  <meta charset="UTF-8">
-  <title>引継情報編集</title>
-  <link rel="stylesheet" href="/css/style.css">
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>監査業務引継書 - 詳細閲覧</title>
+    <link rel="stylesheet" href="../css/style.css">
+    <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined" rel="stylesheet" />
 </head>
-<body>
-  <h1>引継情報編集</h1>
+<body id="page-view"> <header>
+        <h1>監査業務引継書システム</h1>
+        <a href="handover.html" class="btn-back-to-list">
+            <span class="material-symbols-outlined" style="font-size: 1em; vertical-align: middle;">arrow_back</span> 一覧へ戻る
+        </a>
+    </header>
 
-  <div class="progress-bar">
-    ステータス: <strong>所属長確認待ち</strong>
-  </div>
+    <main class="container">
+        <section class="page-header">
+            <h2>引継ぎ情報 詳細</h2>
+            <button type="button" id="btnGoToEdit" class="btn btn-secondary" style="display:none;">
+                <span class="material-symbols-outlined">edit</span> 編集する
+            </button>
+        </section>
 
-  <section>
-    <h2 onclick="this.nextElementSibling.classList.toggle('hidden')">▶ 関与先情報</h2>
-    <div>
-      <label>商号: <input type="text" name="s_name"></label><br>
-      <label>住所: <input type="text" name="s_address"></label>
-    </div>
+        <section id="progressBarContainerView" class="progress-bar-container card">
+            <div class="progress-segment">読み込み中...</div>
+        </section>
 
-    <h2 onclick="this.nextElementSibling.classList.toggle('hidden')">▶ 監査情報</h2>
-    <div class="hidden">
-      <label>監査完了年月: <input type="date" name="dt_completed"></label><br>
-      <label>監査場所: 
-        <select>
-          <option>事務所</option>
-          <option>現地</option>
-          <option>その他</option>
-        </select>
-      </label>
-    </div>
-  </section>
+        <div id="handoverViewContent" class="card">
+            <details class="view-collapsible-section" open>
+                <summary><span class="material-symbols-outlined">expand_more</span> 関与先情報</summary>
+                <div class="section-content view-grid">
+                    <div class="view-item"><dt>顧客ID</dt><dd id="view_s_customer">...</dd></div>
+                    <div class="view-item"><dt>関与先CD</dt><dd id="view_id_tkc_cd">...</dd></div>
+                    <div class="view-item"><dt>関与先_商号</dt><dd id="view_s_name">...</dd></div>
+                </div>
+            </details>
 
-  <!-- <button>提出</button> -->
+            <details class="view-collapsible-section" id="viewApprovalSection" open>
+                <summary><span class="material-symbols-outlined">expand_more</span> 承認状況</summary>
+                <div class="section-content">
+                    <h4>承認履歴</h4>
+                    <div id="viewApprovalHistory" class="approval-history-log">
+                        <p>履歴情報はありません。</p>
+                    </div>
+                    <hr>
+                    <h4>担当者情報</h4>
+                     <div class="view-grid">
+                        <div class="view-item"><dt>前任者ID (作成者)</dt><dd id="view_s_predecessor">...</dd></div>
+                        <div class="view-item"><dt>所属長ID (承認者)</dt><dd id="view_s_superior">...</dd></div>
+                        <div class="view-item"><dt>後任者ID (引継ぎ先)</dt><dd id="view_s_in_charge">...</dd></div>
+                    </div>
+                </div>
+            </details>
+
+            <div class="main-form-actions form-actions">
+                <a href="handover.html" class="btn btn-secondary">一覧へ戻る</a>
+            </div>
+        </div>
+    </main>
+
+    <footer>
+        </footer>
+
+    <script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
+    <script src="../js/global_constants.js"></script>
+    <script src="../js/script.js"></script>
 </body>
 </html>
