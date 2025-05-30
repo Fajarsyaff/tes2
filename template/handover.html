@@ -28,51 +28,52 @@
             </div>
             <p class="page-subtitle">申請一覧</p>
 
-<!-- Ganti bagian filter dengan ini -->
-<div class="filter-bar">
-    <div class="filter-group">
-        <label for="filterPredecessor" class="filter-label">
-            <i class="fas fa-user-tie"></i> 担当者
-        </label>
-        <input type="search" id="filterPredecessor" placeholder="検索" list="data-worker" class="filter-input">
-    </div>
-    
-    <div class="filter-group">
-        <label for="filterKeyword" class="filter-label">
-            <i class="fas fa-key"></i> キーワード
-        </label>
-        <input type="text" id="filterKeyword" placeholder="商号・代表者名" class="filter-input">
-    </div>
-    
-    <div class="filter-group">
-        <label for="filterStatus" class="filter-label">
-            <i class="fas fa-filter"></i> ステータス
-        </label>
-        <select id="filterStatus" class="filter-select">
-            <option value="">すべて</option>
-            <option value="pending_superior">所属長確認待ち</option>
-            <option value="pending_dept_head">部長確認待ち</option>
-        </select>
-    </div>
-    
-    <div class="filter-group filter-actions">
-        <button type="submit" class="btn-filter-apply">
-            <i class="fas fa-filter"></i> 適用
-        </button>
-        <div class="filter-checkbox-container">
-            <input type="checkbox" id="filterIncludeCompleted" class="filter-checkbox">
-            <label for="filterIncludeCompleted" class="filter-checkbox-label">
-                <i class="fas fa-check-double"></i> 完了分を含む
-            </label>
-        </div>
-    </div>
-</div>
+            <div class="action-bar">
+                <button type="button" id="btnCreateNew" class="btn btn-primary">
+                    <i class="fas fa-plus"></i> 新規作成
+                </button>
+            </div>
 
-<datalist id="data-worker">
-    <option value="佐藤美咲">
-    <option value="鈴木健太">
-    <option value="高橋淳子">
-</datalist>
+            <form id="mainFiltersForm"> <div class="filter-bar">
+                    <div class="filter-group">
+                        <label for="filterPredecessor" class="filter-label">
+                            <i class="fas fa-user-tie"></i> 担当者
+                        </label>
+                        <input type="search" id="filterPredecessor" name="predecessor" placeholder="検索" list="data-worker" class="filter-input">
+                    </div>
+                    
+                    <div class="filter-group">
+                        <label for="filterKeyword" class="filter-label">
+                            <i class="fas fa-key"></i> キーワード
+                        </label>
+                        <input type="text" id="filterKeyword" name="keyword" placeholder="商号・代表者名" class="filter-input">
+                    </div>
+                    
+                    <div class="filter-group">
+                        <label for="filterStatus" class="filter-label"> <i class="fas fa-tasks"></i> ステータス </label>
+                        <select id="filterStatus" name="status" class="filter-select">
+                            <option value="">すべて</option>
+                            <option value="pending_superior">所属長確認待ち</option>
+                            <option value="pending_dept_head">部長確認待ち</option>
+                            </select>
+                    </div>
+                    
+                    <div class="filter-group filter-actions-group"> <div class="filter-checkbox-container">
+                            <input type="checkbox" id="filterIncludeCompleted" name="include_completed" class="filter-checkbox">
+                            <label for="filterIncludeCompleted" class="filter-checkbox-label">
+                                <i class="fas fa-check-double"></i> 完了分を含む
+                            </label>
+                        </div>
+                        <button type="submit" id="btnApplyMainFilters" class="btn-filter-apply"> <i class="fas fa-filter"></i> 適用
+                        </button>
+                    </div>
+                </div>
+            </form>
+            <datalist id="data-worker">
+                <option value="佐藤美咲">
+                <option value="鈴木健太">
+                <option value="高橋淳子">
+            </datalist>
             
             <div class="table-meta">
                 <div class="sort-options">
@@ -111,7 +112,7 @@
                             <td>1,250,000</td>
                             <td>佐藤 美咲</td>
                             <td>所属長確認待ち</td>
-                            <td><a href="#" class="action-view" title="詳細表示"><i class="fas fa-eye"></i></a></td>
+                            <td><a href="handover_view.html?id=C000001" class="action-view" title="詳細表示"><i class="fas fa-eye"></i></a></td>
                         </tr>
                         <tr>
                             <td>2024-03-14</td>
@@ -121,27 +122,26 @@
                             <td>980,000</td>
                             <td>鈴木 健太</td>
                             <td>部長確認待ち</td>
-                            <td><a href="#" class="action-view" title="詳細表示"><i class="fas fa-eye"></i></a></td>
+                            <td><a href="handover_view.html?id=C000002" class="action-view" title="詳細表示"><i class="fas fa-eye"></i></a></td>
                         </tr>
                     </tbody>
                 </table>
             </div>
             <div id="paginationControls" class="pagination-controls">
-                <button>&laquo;</button>
-                <button class="active">1</button>
-                <button>2</button>
-                <button>3</button>
-                <button>4</button>
-                <span>...</span>
-                <button>40</button>
-                <button>&raquo;</button>
+                <div class="pagination-buttons">
+                    <button>&laquo;</button>
+                    <button class="active">1</button>
+                    <button>2</button>
+                    <button>3</button>
+                    <button>4</button>
+                    <span>...</span>
+                    <button>40</button>
+                    <button>&raquo;</button>
+                </div>
             </div>
             <span id="tableRowCount">Showing data 1 to 8 of 256k entries</span>
         </section>
-        </main>
-
-    <datalist id="data-worker">
-    </datalist>
+    </main>
 
     <script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
     <script src="../js/global_constants.js"></script>
