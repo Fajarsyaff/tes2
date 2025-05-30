@@ -28,54 +28,51 @@
             </div>
             <p class="page-subtitle">申請一覧</p>
 
-            <div class="action-bar">
-                <button type="button" id="btnCreateNew" class="btn btn-primary">
-                    <i class="fas fa-plus"></i> 新規作成
-                </button>
-                <div class="filters-right">
-                    <div class="filter-group">
-                        <select id="filterOccupation" name="occupation">
-                            <option value="">Select Occupation</option>
-                            <option value="occupation1">Occupation 1</option>
-                            <option value="occupation2">Occupation 2</option>
-                        </select>
-                    </div>
-                    <div class="filter-group">
-                        <select id="filterStatus" name="status">
-                            <option value="">ステータス (すべて)</option>
-                            <option value="pending_superior">所属長確認待ち</option>
-                            <option value="pending_dept_head">部長確認待ち</option>
-                            <option value="completed_ga">総務確認待ち</option>
-                            <option value="final_completed">確認完了</option>
-                        </select>
-                    </div>
-                </div>
-            </div>
-
-           <form id="searchFiltersForm" class="table-filters">
-                <div class="filter-row horizontal-filters">
-                    <div class="filter-group filter-predecessor">
-                        <label for="filterPredecessor"><i class="fas fa-user-tie"></i> 担当者 (前任者)</label>
-                        <input type="search" id="filterPredecessor" name="predecessor" list="data-worker" placeholder="前任者を選択・検索">
-                    </div>
-                    <div class="filter-group filter-keyword">
-                        <label for="filterKeyword"><i class="fas fa-key"></i> キーワード</label>
-                        <input type="text" id="filterKeyword" name="keyword" placeholder="商号、代表者名などで検索">
-                    </div>
-                    <div class="filter-group filter-action">
-                        <label class="hidden-label-for-alignment">&nbsp;</label>
-                        <button type="submit" id="btnApplyFilters" class="btn btn-secondary">
-                            <i class="fas fa-filter"></i> フィルター適用
-                        </button>
-                    </div>
-                </div>
-    <div class="filter-group full-width-checkbox">
-        <div class="checkbox-filter-group">
-            <input type="checkbox" id="filterIncludeCompleted" name="include_completed">
-            <label for="filterIncludeCompleted">完了分を含む</label>
+<!-- Ganti bagian filter dengan ini -->
+<div class="filter-bar">
+    <div class="filter-group">
+        <label for="filterPredecessor" class="filter-label">
+            <i class="fas fa-user-tie"></i> 担当者
+        </label>
+        <input type="search" id="filterPredecessor" placeholder="検索" list="data-worker" class="filter-input">
+    </div>
+    
+    <div class="filter-group">
+        <label for="filterKeyword" class="filter-label">
+            <i class="fas fa-key"></i> キーワード
+        </label>
+        <input type="text" id="filterKeyword" placeholder="商号・代表者名" class="filter-input">
+    </div>
+    
+    <div class="filter-group">
+        <label for="filterStatus" class="filter-label">
+            <i class="fas fa-filter"></i> ステータス
+        </label>
+        <select id="filterStatus" class="filter-select">
+            <option value="">すべて</option>
+            <option value="pending_superior">所属長確認待ち</option>
+            <option value="pending_dept_head">部長確認待ち</option>
+        </select>
+    </div>
+    
+    <div class="filter-group filter-actions">
+        <button type="submit" class="btn-filter-apply">
+            <i class="fas fa-filter"></i> 適用
+        </button>
+        <div class="filter-checkbox-container">
+            <input type="checkbox" id="filterIncludeCompleted" class="filter-checkbox">
+            <label for="filterIncludeCompleted" class="filter-checkbox-label">
+                <i class="fas fa-check-double"></i> 完了分を含む
+            </label>
         </div>
     </div>
-            </form>
+</div>
+
+<datalist id="data-worker">
+    <option value="佐藤美咲">
+    <option value="鈴木健太">
+    <option value="高橋淳子">
+</datalist>
             
             <div class="table-meta">
                 <div class="sort-options">
