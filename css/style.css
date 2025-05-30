@@ -347,3 +347,11 @@ body {
     gap: 0.3rem; /* Jarak antara ikon dan teks */
     transition: background-color 0.15s ease-in-out, border-color 0.15s ease-in-out, color 0.15s ease-in-out;
 }
+
+.main-content-card .table-filters .filter-row.horizontal-filters {
+    display: flex; 
+    flex-wrap: nowrap; /* Mencegah wrapping item ke baris baru jika memungkinkan */
+    gap: 1.5rem; 
+    align-items: flex-end; 
+    margin-bottom: 1rem; 
+}

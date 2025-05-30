@@ -52,23 +52,28 @@
                 </div>
             </div>
 
-            <form id="searchFiltersForm" class="table-filters">
-                <div class="filter-group">
-                    <label for="filterPredecessor"><i class="fas fa-user-tie"></i> 担当者 (前任者)</label>
-                    <input type="search" id="filterPredecessor" name="predecessor" list="data-worker" placeholder="前任者を選択・検索">
+           <form id="searchFiltersForm" class="table-filters">
+                <div class="filter-row horizontal-filters">
+                    <div class="filter-group filter-predecessor">
+                        <label for="filterPredecessor"><i class="fas fa-user-tie"></i> 担当者 (前任者)</label>
+                        <input type="search" id="filterPredecessor" name="predecessor" list="data-worker" placeholder="前任者を選択・検索">
+                    </div>
+                    <div class="filter-group filter-keyword">
+                        <label for="filterKeyword"><i class="fas fa-key"></i> キーワード</label>
+                        <input type="text" id="filterKeyword" name="keyword" placeholder="商号、代表者名などで検索">
+                    </div>
+                    <div class="filter-group filter-action">
+                        <label class="hidden-label-for-alignment">&nbsp;</label>
+                        <button type="submit" id="btnApplyFilters" class="btn btn-secondary">
+                            <i class="fas fa-filter"></i> フィルター適用
+                        </button>
+                    </div>
                 </div>
-                <div class="filter-group">
-                    <label for="filterKeyword"><i class="fas fa-key"></i> キーワード</label>
-                    <input type="text" id="filterKeyword" name="keyword" placeholder="商号、代表者名などで検索">
-                </div>
-                <div class="filter-group checkbox-group">
-                    <input type="checkbox" id="filterIncludeCompleted" name="include_completed">
-                    <label for="filterIncludeCompleted">完了分を含む</label>
-                </div>
-                <div class="filter-group">
-                    <button type="submit" id="btnApplyFilters" class="btn btn-secondary">
-                        <i class="fas fa-filter"></i> フィルター適用
-                    </button>
+                <div class="filter-group filter-row">
+                    <div class="filter-group checkbox-group full-width-checkbox">
+                        <input type="checkbox" id="filterIncludeCompleted" name="include_completed">
+                        <label for="filterIncludeCompleted">完了分を含む</label>
+                    </div>
                 </div>
             </form>
             
