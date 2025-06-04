@@ -397,3 +397,142 @@ button[type="reset"]:hover {
         margin-top: 8px;
     }
 }
+
+.info-group > div { /* Konten di dalam details */
+    padding: 15px;
+}
+
+/* Ubah .form-grid menjadi layout satu kolom */
+.form-grid {
+    display: flex; /* Menggunakan flexbox untuk kontrol yang lebih mudah per item */
+    flex-direction: column; /* Item akan berjajar ke bawah */
+    gap: 15px; /* Jarak antar field/baris */
+}
+
+.form-grid > div, /* Setiap div pembungkus label+input */
+.form-grid .full-width { /* Termasuk yang tadinya full-width */
+    width: 100%; /* Ambil lebar penuh */
+    /* grid-column: auto; Tidak diperlukan lagi */
+}
+
+
+/* Ubah .form-grid-col3 menjadi layout satu kolom */
+.form-grid-col3 {
+    display: flex; /* Menggunakan flexbox */
+    flex-direction: column; /* Item akan berjajar ke bawah */
+    gap: 15px; /* Jarak antar field/baris */
+}
+
+.form-grid-col3 > div { /* Setiap div yang membungkus label+select dan label+input備考 */
+    width: 100%;
+    /* display: contents; Tidak diperlukan lagi dengan flex column */
+}
+
+/* Styling untuk item di dalam .form-grid-col3 agar label dan input tetap di baris terpisah jika diperlukan,
+   atau biarkan default block behavior untuk label dan input.
+   Jika sebelumnya Anda punya div terpisah untuk "有無" dan "備考", itu sudah bagus.
+   Jika tidak, pastikan label dan input/selectnya menjadi block.
+*/
+.form-grid-col3 label:not([for]),
+.form-grid-col3 select,
+.form-grid-col3 .col-span-2 { /* Sekarang .col-span-2 hanya div biasa */
+    width: 100%; /* Ambil lebar penuh */
+    /* grid-column: auto; Tidak diperlukan lagi */
+}
+
+.form-grid-col3 .col-span-2 label {
+    display: block; /* Sudah benar */
+    margin-bottom: 3px;
+}
+.form-grid-col3 .col-span-2 input[type="text"] {
+    width: 100%; /* Pastikan input teks juga full width */
+}
+
+
+/* Label dan Input styling (umumnya sudah OK, pastikan width: 100% pada input efektif) */
+label {
+    display: block;
+    margin-bottom: 5px;
+    font-weight: 500;
+    font-size: 0.9em;
+    color: #555;
+}
+
+input[type="text"],
+input[type="date"],
+input[type="number"],
+input[type="email"],
+input[type="tel"],
+select,
+textarea {
+    width: 100%;
+    padding: 10px;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    box-sizing: border-box; /* Penting untuk width 100% agar padding tidak menambah lebar */
+    font-size: 0.95em;
+}
+
+/* ... (CSS Anda yang lain untuk textarea, readonly, buttons, approval-status-grid, dll. bisa tetap sama) ... */
+
+/* Hapus atau sesuaikan bagian .approval-status-grid jika Anda juga ingin ini berjajar ke bawah per baris approver.
+   Struktur .approver-row yang sudah ada dengan grid 3 kolom (label, nama, tanggal) mungkin masih relevan,
+   namun jika Anda ingin setiap elemen (label, nama, tanggal, komentar) berada di barisnya sendiri,
+   maka .approver-row juga perlu diubah menjadi flex-direction: column.
+   Namun, dari permintaan Anda, sepertinya fokusnya pada field-field input utama.
+*/
+
+/* Contoh jika Anda ingin .approver-row juga stacking: */
+/*
+.approver-row {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start; // Rata kiri
+    gap: 5px; // Jarak antar elemen dalam satu baris approver
+    padding-bottom: 10px;
+    border-bottom: 1px solid #eee;
+}
+.approver-row:last-child {
+    border-bottom: none;
+}
+.approver-label {
+    text-align: left; // Rata kiri
+    font-size: 0.9em;
+}
+.approver-comment-display {
+    padding-left: 0; // Hapus indentasi jika stacking
+    border-left: none; // Hapus border kiri jika stacking
+    width: 100%; // Ambil lebar penuh
+}
+*/
+
+/* Hapus media query yang mengubah .form-grid dan .form-grid-col3 menjadi 1 kolom
+   karena sekarang itu sudah menjadi defaultnya.
+   Atau sesuaikan jika ada styling lain di dalamnya.
+*/
+@media (max-width: 768px) {
+    /* .form-grid {
+        grid-template-columns: 1fr; Sudah default flex column
+    }
+    .form-grid-col3 {
+        grid-template-columns: 1fr; Sudah default flex column
+    } */
+    /* Bagian lain dari media query Anda bisa tetap ada */
+
+    /* Jika Anda mengubah .approver-row menjadi stacking, maka tidak perlu lagi diubah di sini */
+    /* .approval-status-grid {
+        grid-template-columns: 1fr;
+        text-align: left;
+    }
+    .approval-status-grid label {
+        text-align: left;
+        margin-bottom: 0;
+    } */
+
+    .action-buttons {
+        flex-direction: column;
+    }
+    .action-buttons button, .main-actions textarea {
+        width: 100%;
+    }
+}
