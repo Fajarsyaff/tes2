@@ -3,106 +3,481 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>監査業務引継書 - 作成・編集</title>
-    <link rel="stylesheet" href="../css/style.css">
-    <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined" rel="stylesheet" />
+    <title>監査業務引継書 - 詳細情報編集</title>
+    <link rel="stylesheet" href="../css/style_edit.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
 </head>
-<body id="page-edit"> <header>
-        <h1>監査業務引継書システム</h1>
-        <a href="handover.html" class="btn-back-to-list">
-            <span class="material-symbols-outlined" style="font-size: 1em; vertical-align: middle;">arrow_back</span> 一覧へ戻る
-        </a>
+     <header class="site-header">
+        <div class="header-title">監査業務引継書システム</div>
+        <div class="user-info">
+            <span id="loggedInUserName">氏名：(部署名)</span>
+            <a href="URL_LOGOUT_ANDA" class="logout-link"><i class="fas fa-sign-out-alt"></i> ログアウト</a>
+        </div>
     </header>
+<body>
+    <div class="container">
+        <header>
+            <h1>監査業務引継書 - 詳細情報編集</h1>
+            <div class="progress-bar-container">
+                <div class="progress-bar" style="width: 30%;">提出済</div>
+                </div>
+        </header>
 
-    <main class="container">
-        <section class="page-header">
-            <h2 id="editPageTitle">引継ぎ情報 作成</h2> </section>
+        <form id="handoverForm">
+            <div class="action-buttons main-actions">
+                <button type="button" id="btnSubmit"><i class="fas fa-paper-plane"></i> 提出</button>
+                <button type="button" id="btnApprove"><i class="fas fa-check"></i> 承認</button>
+                <button type="button" id="btnDeny"><i class="fas fa-times"></i> 否認</button>
+                <textarea id="approvalComment" placeholder="承認/否認コメント"></textarea>
+            </div>
 
-        <section id="progressBarContainer" class="progress-bar-container card">
-            <div class="progress-segment">読み込み中...</div>
-        </section>
-
-        <form id="handoverEditForm" class="card">
-            <details class="form-collapsible-section" open>
-                <summary><span class="material-symbols-outlined">expand_more</span> 関与先情報</summary>
-                <div class="section-content form-grid">
-                    <div class="form-group readonly-group">
-                        <label>顧客ID</label>
-                        <p id="s_customer_display" class="readonly-text">（新規作成時は自動生成）</p>
+            <details class="info-group" open>
+                <summary>顧客選択</summary>
+                <div class="form-grid">
+                    <div>
+                        <label for="s_customer">顧客ID:</label>
+                        <input type="text" id="s_customer" name="s_customer" list="customerList" placeholder="顧客を選択または入力">
+                        <datalist id="customerList">
+                            <option value="c000001">顧客A</option>
+                            <option value="c000002">顧客B</option>
+                        </datalist>
                     </div>
-                    <div class="form-group">
-                        <label for="id_tkc_cd_1">関与先CD</label>
-                        <div class="kanyo-saki-cd-group">
-                            <input type="text" id="id_tkc_cd_1" name="id_tkc_cd_1" maxlength="5" pattern="\d{5}" placeholder="00000">
-                            <span class="hyphen">-</span>
-                            <input type="text" id="id_tkc_cd_2" name="id_tkc_cd_2" maxlength="3" pattern="\d{3}" placeholder="000">
-                        </div>
+                    <div>
+                        <label for="id_tkc_cd">関与先CD:</label>
+                        <input type="text" id="id_tkc_cd" name="id_tkc_cd" readonly>
                     </div>
-                    <div class="form-group">
-                        <label for="s_name">関与先_商号</label>
-                        <input type="text" id="s_name" name="s_name" required>
+                    <div>
+                        <label for="s_name">関与先_商号:</label>
+                        <input type="text" id="s_name" name="s_name" readonly>
                     </div>
-                    </div> </details>
+                    <div>
+                        <label for="s_address">関与先_住所:</label>
+                        <input type="text" id="s_address" name="s_address" readonly>
+                    </div>
+                </div>
+            </details>
 
-            <details class="form-collapsible-section">
-                <summary><span class="material-symbols-outlined">expand_more</span> 構成・特徴</summary>
-                <div class="section-content form-grid">
-                    <div class="form-group">
-                        <label for="s_rep_name">代表者氏名</label>
+            <details class="info-group" open>
+                <summary>関与先情報</summary>
+                <div class="form-grid">
+                    <div>
+                        <label for="s_type">関与先_業種・業態:</label>
+                        <input type="text" id="s_type" name="s_type" required>
+                    </div>
+                    <div>
+                        <label for="dt_from">開始事業年度:</label>
+                        <input type="date" id="dt_from" name="dt_from" required>
+                    </div>
+                    <div>
+                        <label for="dt_to">終了事業年度:</label>
+                        <input type="date" id="dt_to" name="dt_to" required>
+                    </div>
+                    <div>
+                        <label for="n_advisory_fee">報酬_顧問料:</label>
+                        <input type="number" id="n_advisory_fee" name="n_advisory_fee" value="0" required>
+                    </div>
+                    <div>
+                        <label for="n_account_closing_fee">報酬_決算料:</label>
+                        <input type="number" id="n_account_closing_fee" name="n_account_closing_fee" value="0" required>
+                    </div>
+                    <div>
+                        <label for="n_others_fee">報酬_その他:</label>
+                        <input type="number" id="n_others_fee" name="n_others_fee">
+                    </div>
+                </div>
+            </details>
+
+            <details class="info-group">
+                <summary>構成・特徴</summary>
+                <div class="form-grid">
+                    <div>
+                        <label for="s_rep_name">代表者氏名:</label>
                         <input type="text" id="s_rep_name" name="s_rep_name" required>
                     </div>
-                    <div class="form-group full-width"> <label for="s_rep_personal">代表者性格・人柄等</label>
-                        <textarea id="s_rep_personal" name="s_rep_personal" rows="3" required></textarea>
+                    <div class="full-width">
+                        <label for="s_rep_personal">代表者性格・人柄等:</label>
+                        <textarea id="s_rep_personal" name="s_rep_personal" required></textarea>
                     </div>
+                    <div>
+                        <label for="s_rep_partner_name">配偶者氏名:</label>
+                        <input type="text" id="s_rep_partner_name" name="s_rep_partner_name">
                     </div>
-            </details>
-
-            <details class="form-collapsible-section" id="approvalSection">
-                <summary><span class="material-symbols-outlined">expand_more</span> 承認状況・担当設定</summary>
-                <div class="section-content">
-                    <h4>承認履歴</h4>
-                    <div id="approvalHistory" class="approval-history-log">
-                        <p>履歴はありません。</p>
+                    <div class="full-width">
+                        <label for="s_rep_partner_personal">配偶者性格・人柄等:</label>
+                        <textarea id="s_rep_partner_personal" name="s_rep_partner_personal"></textarea>
                     </div>
-                    <hr>
-                    <h4>担当者設定・現在の承認アクション</h4>
-                    <div class="form-grid">
-                        <div class="form-group">
-                            <label for="s_predecessor_display">前任者ID (作成者)</label>
-                             <p id="s_predecessor_display" class="readonly-text">（ログインユーザー）</p>
-                             <input type="hidden" id="s_predecessor" name="s_predecessor">
-                        </div>
-                        <div class="form-group">
-                            <label for="s_superior">所属長ID (承認者)</label>
-                            <input type="search" id="s_superior" name="s_superior" list="data-worker" placeholder="所属長を選択・検索" required>
-                        </div>
-                        <div class="form-group">
-                            <label for="s_in_charge">後任者ID (引継ぎ先)</label>
-                            <input type="search" id="s_in_charge" name="s_in_charge" list="data-worker" placeholder="後任者を選択・検索">
-                        </div>
-                        <div class="form-group full-width" id="currentApproverCommentGroup" style="display:none;">
-                            <label for="current_approval_comment">コメント</label>
-                            <textarea id="current_approval_comment" name="current_approval_comment" rows="3" placeholder="承認または否認の理由を記入"></textarea>
-                        </div>
+                    <div>
+                        <label for="s_rep_others_name">その他氏名:</label>
+                        <input type="text" id="s_rep_others_name" name="s_rep_others_name">
                     </div>
-                    <div id="approvalActionButtons" class="form-actions" style="margin-top:10px; display:none;">
-                        </div>
+                    <div class="full-width">
+                        <label for="s_rep_others_personal">その他性格・人柄等:</label>
+                        <textarea id="s_rep_others_personal" name="s_rep_others_personal"></textarea>
+                    </div>
                 </div>
             </details>
 
-            <div class="main-form-actions form-actions">
-                <button type="button" id="btnCancelEdit" class="btn btn-secondary">キャンセル</button>
-                <button type="submit" id="btnSubmitHandover" class="btn btn-primary">提出</button>
+            <details class="info-group">
+                <summary>連絡先</summary>
+                 <div class="form-grid">
+                    <div>
+                        <label for="s_corp_tel">会社_TEL:</label>
+                        <input type="tel" id="s_corp_tel" name="s_corp_tel" required>
+                    </div>
+                    <div>
+                        <label for="s_corp_fax">会社_FAX:</label>
+                        <input type="text" id="s_corp_fax" name="s_corp_fax">
+                    </div>
+                    <div>
+                        <label for="s_rep_tel">代表者_TEL:</label>
+                        <input type="tel" id="s_rep_tel" name="s_rep_tel">
+                    </div>
+                    <div>
+                        <label for="s_rep_email">代表者_Eメール:</label>
+                        <input type="email" id="s_rep_email" name="s_rep_email">
+                    </div>
+                    <div class="full-width">
+                        <label for="s_rep_contact">連絡先その他:</label>
+                        <input type="text" id="s_rep_contact" name="s_rep_contact">
+                    </div>
                 </div>
+            </details>
+
+            <details class="info-group">
+                <summary>集金状況</summary>
+                <div class="form-grid">
+                    <div>
+                        <label for="n_recovery">回収方法:</label>
+                        <select id="n_recovery" name="n_recovery">
+                            <option value="">選択してください</option>
+                            <option value="1">銀行振込</option>
+                            <option value="2">現金</option>
+                            <option value="3">その他</option>
+                        </select>
+                    </div>
+                    <div>
+                        <label for="n_advisory_yet">未集金額_顧問料:</label>
+                        <input type="number" id="n_advisory_yet" name="n_advisory_yet">
+                    </div>
+                     <div>
+                        <label for="n_account_closing_yet">未集金額_決算料:</label>
+                        <input type="number" id="n_account_closing_yet" name="n_account_closing_yet">
+                    </div>
+                    <div>
+                        <label for="n_others_yet">未集金額_その他:</label>
+                        <input type="number" id="n_others_yet" name="n_others_yet">
+                    </div>
+                    <div>
+                        <label for="dt_recovery">回収予定年月日:</label>
+                        <input type="date" id="dt_recovery" name="dt_recovery">
+                    </div>
+                    <div class="full-width">
+                        <label for="s_recover_reason">未回収理由:</label>
+                        <input type="text" id="s_recover_reason" name="s_recover_reason">
+                    </div>
+                </div>
+            </details>
+
+            <details class="info-group">
+                <summary>監査</summary>
+                <div class="form-grid">
+                    <div>
+                        <label for="dt_completed">監査完了年月:</label>
+                        <input type="date" id="dt_completed" name="dt_completed" required>
+                    </div>
+                    <div>
+                        <label for="n_place">監査場所:</label>
+                        <select id="n_place" name="n_place" required>
+                            <option value="">選択してください</option>
+                            <option value="1">弊社</option>
+                            <option value="2">顧客先</option>
+                            <option value="0">その他</option>
+                        </select>
+                    </div>
+                    <div>
+                        <label for="s_place_others">監査場所_その他:</label>
+                        <input type="text" id="s_place_others" name="s_place_others">
+                    </div>
+                     <div>
+                        <label for="s_convenient">都合日時:</label>
+                        <input type="text" id="s_convenient" name="s_convenient" required>
+                    </div>
+                    <div>
+                        <label for="s_required_time">所要時間:</label>
+                        <input type="text" id="s_required_time" name="s_required_time" required>
+                    </div>
+                    <div class="full-width">
+                        <label for="s_affiliated_company">関連会社:</label>
+                        <input type="text" id="s_affiliated_company" name="s_affiliated_company">
+                    </div>
+                    <div class="full-width">
+                        <label for="s_heeding_audit">監査時留意ポイント:</label>
+                        <textarea id="s_heeding_audit" name="s_heeding_audit" required></textarea>
+                    </div>
+                </div>
+            </details>
+
+            <details class="info-group">
+                <summary>決算</summary>
+                <div class="form-grid">
+                    <div>
+                        <label for="n_interim_return">予定／中間申告有無:</label>
+                        <select id="n_interim_return" name="n_interim_return" required>
+                            <option value="1">有</option>
+                            <option value="0">無</option>
+                        </select>
+                    </div>
+                    <div>
+                        <label for="n_consumption_tax">消費税届出:</label>
+                        <select id="n_consumption_tax" name="n_consumption_tax" required>
+                             <option value="">選択してください</option>
+                            <option value="1">課税事業者</option>
+                            <option value="2">免税事業者</option>
+                            <option value="3">その他届出あり</option>
+                        </select>
+                    </div>
+                    <div class="full-width">
+                        <label for="s_heeding_settlement">決算時留意ポイント:</label>
+                        <textarea id="s_heeding_settlement" name="s_heeding_settlement" required></textarea>
+                    </div>
+                </div>
+            </details>
+
+            <details class="info-group">
+                <summary>税務調査</summary>
+                <div class="form-grid">
+                    <div>
+                        <label for="dt_last_tax_audit">前回税務調査日:</label>
+                        <input type="date" id="dt_last_tax_audit" name="dt_last_tax_audit">
+                    </div>
+                    <div class="full-width">
+                        <label for="s_tax_audit_memo">税務調査特記事項:</label>
+                        <textarea id="s_tax_audit_memo" name="s_tax_audit_memo"></textarea>
+                    </div>
+                </div>
+            </details>
+
+            <details class="info-group">
+                <summary>源泉所得税関係</summary>
+                <div class="form-grid-col3">
+                    <div>
+                        <label>扶養控除申告書有無:</label>
+                        <select id="n_exemption_for_dependents" name="n_exemption_for_dependents"><option value="1">有</option><option value="0">無</option></select>
+                    </div>
+                    <div class="col-span-2">
+                        <label for="s_exemption_for_dependents">備考:</label>
+                        <input type="text" id="s_exemption_for_dependents" name="s_exemption_for_dependents">
+                    </div>
+
+                    <div>
+                        <label>前年年末調整有無:</label>
+                        <select id="n_last_year_end_adjustment" name="n_last_year_end_adjustment"><option value="1">有</option><option value="0">無</option></select>
+                    </div>
+                    <div class="col-span-2">
+                        <label for="s_last_year_end_adjustment">備考:</label>
+                        <input type="text" id="s_last_year_end_adjustment" name="s_last_year_end_adjustment">
+                    </div>
+
+                    <div>
+                        <label>給与支払報告書有無:</label>
+                        <select id="n_payroll_report" name="n_payroll_report"><option value="1">有</option><option value="0">無</option></select>
+                    </div>
+                    <div class="col-span-2">
+                        <label for="s_payroll_report">備考:</label>
+                        <input type="text" id="s_payroll_report" name="s_payroll_report">
+                    </div>
+                    
+                    <div>
+                        <label>法定調書合計表有無:</label>
+                        <select id="n_legal_report" name="n_legal_report"><option value="1">有</option><option value="0">無</option></select>
+                    </div>
+                    <div class="col-span-2">
+                        <label for="s_legal_report">備考:</label>
+                        <input type="text" id="s_legal_report" name="s_legal_report">
+                    </div>
+
+                    <div>
+                        <label>納期の特例有無:</label>
+                        <select id="n_deadline_exceptions" name="n_deadline_exceptions"><option value="1">有</option><option value="0">無</option></select>
+                    </div>
+                    <div class="col-span-2">
+                        <label for="s_deadline_exceptions">備考:</label>
+                        <input type="text" id="s_deadline_exceptions" name="s_deadline_exceptions">
+                    </div>
+
+                    <div>
+                        <label>納付遅滞有無 (源泉):</label> <select id="n_late_payment_withholding" name="n_late_payment_withholding"><option value="1">有</option><option value="0">無</option></select>
+                    </div>
+                    <div class="col-span-2">
+                        <label for="s_late_payment_withholding">備考:</label> <input type="text" id="s_late_payment_withholding" name="s_late_payment_withholding">
+                    </div>
+                </div>
+            </details>
+
+            <details class="info-group">
+                <summary>その他申告</summary>
+                <div class="form-grid-col3">
+                    <div>
+                        <label>償却資産税有無:</label>
+                        <select id="n_depreciable_assets_tax" name="n_depreciable_assets_tax"><option value="1">有</option><option value="0">無</option></select>
+                    </div>
+                    <div class="col-span-2">
+                        <label for="s_depreciable_assets_tax">備考:</label>
+                        <input type="text" id="s_depreciable_assets_tax" name="s_depreciable_assets_tax">
+                    </div>
+
+                    <div>
+                        <label>役員などの確定申告有無:</label>
+                        <select id="n_final_tax_return" name="n_final_tax_return"><option value="1">有</option><option value="0">無</option></select>
+                    </div>
+                    <div class="col-span-2">
+                        <label for="s_final_tax_return">備考:</label>
+                        <input type="text" id="s_final_tax_return" name="s_final_tax_return">
+                    </div>
+                    <div class="full-width">
+                        <label for="s_taxpayer_name">納税者氏名:</label>
+                        <input type="text" id="s_taxpayer_name" name="s_taxpayer_name">
+                    </div>
+                </div>
+            </details>
+
+            <details class="info-group">
+                <summary>社会保険</summary>
+                <div class="form-grid">
+                    <div>
+                        <label for="n_health_insurance">健康保険:</label>
+                        <select id="n_health_insurance" name="n_health_insurance"><option value="1">加入</option><option value="0">未加入</option><option value="2">その他</option></select>
+                    </div>
+                    <div>
+                        <label for="n_employment_insurance">雇用保険:</label>
+                        <select id="n_employment_insurance" name="n_employment_insurance"><option value="1">加入</option><option value="0">未加入</option><option value="2">その他</option></select>
+                    </div>
+                    <div>
+                        <label for="n_workers_accident_insurance">労災保険:</label>
+                        <select id="n_workers_accident_insurance" name="n_workers_accident_insurance"><option value="1">加入</option><option value="0">未加入</option><option value="2">その他</option></select>
+                    </div>
+                    <div>
+                        <label>納付遅滞有無 (社保):</label> <select id="n_late_payment_social" name="n_late_payment_social"><option value="1">有</option><option value="0">無</option></select>
+                    </div>
+                </div>
+            </details>
+
+            <details class="info-group">
+                <summary>その他</summary>
+                <div class="form-grid">
+                    <div>
+                        <label for="n_greetings_method">引継挨拶手段:</label>
+                        <select id="n_greetings_method" name="n_greetings_method">
+                            <option value="">選択してください</option>
+                            <option value="1">対面</option>
+                            <option value="2">電話</option>
+                            <option value="3">メール</option>
+                        </select>
+                    </div>
+                </div>
+            </details>
+            
+            <details class="info-group">
+                <summary>その他申し送り事項</summary>
+                <div class="form-grid">
+                    <div class="full-width">
+                        <label for="s_special_notes">質問・苦情・要望等:</label>
+                        <textarea id="s_special_notes" name="s_special_notes"></textarea>
+                    </div>
+                    <div class="full-width">
+                        <label for="s_other_notes">その他申し送り事項:</label>
+                        <textarea id="s_other_notes" name="s_other_notes" required></textarea>
+                    </div>
+                </div>
+            </details>
+
+            <details class="info-group" open>
+    <summary>承認状況</summary>
+    <div class="approval-status-section"> <div class="approver-row">
+            <div class="approver-label">前任者 (自身):</div>
+            <div class="approver-name"><span id="s_predecessor_name"></span></div>
+            <div class="approval-timestamp"><span id="dt_submitted"></span></div>
+            <div class="approver-comment-display">
+                </div>
+        </div>
+
+        <div class="approver-row">
+            <div class="approver-label"><label for="s_superior">所属長:</label></div>
+            <div class="approver-name">
+                <input type="text" id="s_superior" name="s_superior" list="workerList_superior" placeholder="所属長を選択">
+                <datalist id="workerList_superior"></datalist>
+            </div>
+            <div class="approval-timestamp"><span id="dt_approved_superior"></span></div>
+            <div class="approver-comment-display">
+                <strong>コメント:</strong> <span id="s_approved_comment"></span> </div>
+        </div>
+
+        <div class="approver-row">
+            <div class="approver-label">部長:</div>
+            <div class="approver-name"><span id="bucho_name">部長氏名</span></div>
+            <div class="approval-timestamp"><span id="dt_approved_1"></span></div>
+            <div class="approver-comment-display">
+                <strong>コメント:</strong> <span id="s_approved_1_comment"></span> </div>
+        </div>
+
+        <div class="approver-row">
+            <div class="approver-label">取締役:</div>
+            <div class="approver-name"><span id="torishimariyaku_name">取締役氏名</span></div>
+            <div class="approval-timestamp"><span id="dt_approved_2"></span></div>
+            <div class="approver-comment-display">
+                <strong>コメント:</strong> <span id="s_approved_2_comment"></span> </div>
+        </div>
+
+        <div class="approver-row">
+            <div class="approver-label">常務:</div>
+            <div class="approver-name"><span id="jomu_name">常務氏名</span></div>
+            <div class="approval-timestamp"><span id="dt_approved_3"></span></div>
+            <div class="approver-comment-display">
+                <strong>コメント:</strong> <span id="s_approved_3_comment"></span> </div>
+        </div>
+
+        <div class="approver-row">
+            <div class="approver-label">専務:</div>
+            <div class="approver-name"><span id="senmu_name">専務氏名</span></div>
+            <div class="approval-timestamp"><span id="dt_approved_4"></span></div>
+            <div class="approver-comment-display">
+                <strong>コメント:</strong> <span id="s_approved_4_comment"></span> </div>
+        </div>
+
+        <div class="approver-row">
+            <div class="approver-label">社長:</div>
+            <div class="approver-name"><span id="shacho_name">社長氏名</span></div>
+            <div class="approval-timestamp"><span id="dt_approved_5"></span></div>
+            <div class="approver-comment-display">
+                <strong>コメント:</strong> <span id="s_approved_5_comment"></span> </div>
+        </div>
+
+        <div class="approver-row">
+            <div class="approver-label">総務確認:</div>
+            <div class="approver-name"><span>総務担当</span></div>
+            <div class="approval-timestamp"><span id="dt_checked"></span></div>
+            <div class="approver-comment-display">
+                <strong>コメント:</strong> <span id="s_checked_comment"></span> </div>
+        </div>
+
+        <div class="approver-row">
+            <div class="approver-label"><label for="s_in_charge">後任者:</label></div>
+            <div class="approver-name">
+                <input type="text" id="s_in_charge" name="s_in_charge" list="workerList_incharge" placeholder="後任者を選択">
+                <datalist id="workerList_incharge"></datalist>
+            </div>
+            <div class="approval-timestamp"></div> <div class="approver-comment-display">
+                </div>
+        </div>
+    </div>
+</details>
+
+            <div class="action-buttons bottom-actions">
+                <button type="button" id="btnSaveDraft">一時保存</button>
+                <button type="reset">リセット</button>
+            </div>
         </form>
-    </main>
-
-    <footer>
-        </footer>
-
-    <datalist id="data-worker">
-        </datalist>
-
+    </div>
     <script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
     <script src="../js/global_constants.js"></script>
     <script src="../js/script.js"></script>

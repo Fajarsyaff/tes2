@@ -21,32 +21,39 @@
         <section class="main-content-card">
             <div class="page-title-bar">
                 <h1><i class="fas fa-home"></i> ホーム</h1>
-                <div class="global-search-container">
-                    <i class="fas fa-search search-icon-input"></i>
-                    <input type="search" id="globalSearch" placeholder="Search">
-                </div>
             </div>
             <p class="page-subtitle">申請一覧</p>
 
-            <div class="action-bar">
-                <button type="button" id="btnCreateNew" class="btn btn-primary">
-                    <i class="fas fa-plus"></i> 新規作成
-                </button>
+           <div class="action-bar">
+                <div class="button-group">
+                    <button type="button" id="btnCreateNew" class="btn btn-primary">
+                        <i class="fas fa-plus"></i> 新規作成
+                    </button>
+                    <button type="button" id="btnToggleFiltersIcon" class="btn btn-secondary btn-icon-only" title="フィルター表示/非表示">
+                        <i class="fas fa-filter"></i>
+                    </button>
+                </div>
             </div>
 
-            <form id="mainFiltersForm"> <div class="filter-bar">
+            <!-- <div class="filter-toggle-bar">
+                <button type="button" id="btnToggleFilters" class="btn btn-secondary btn-sm">
+                    <i class="fas fa-filter"></i> フィルターを隠す </button>
+            </div> -->
+
+            <form id="mainFiltersForm"> 
+                <div class="filter-bar">
                     <div class="filter-group">
                         <label for="filterPredecessor" class="filter-label">
                             <i class="fas fa-user-tie"></i> 担当者
                         </label>
-                        <input type="search" id="filterPredecessor" name="predecessor" placeholder="検索" list="data-worker" class="filter-input">
+                        <input type="search" id="filterPredecessor" name="predecessor" placeholder="前任者を検索" list="data-worker" class="filter-input">
                     </div>
                     
                     <div class="filter-group">
                         <label for="filterKeyword" class="filter-label">
                             <i class="fas fa-key"></i> キーワード
                         </label>
-                        <input type="text" id="filterKeyword" name="keyword" placeholder="商号・代表者名" class="filter-input">
+                        <input type="text" id="filterKeyword" name="keyword" placeholder="商号, 代表者名, 住所, 特記事項など" class="filter-input">
                     </div>
                     
                     <div class="filter-group">
@@ -55,10 +62,17 @@
                             <option value="">すべて</option>
                             <option value="pending_superior">所属長確認待ち</option>
                             <option value="pending_dept_head">部長確認待ち</option>
-                            </select>
+                            <option value="pending_director">取締役確認待ち</option>
+                            <option value="pending_managing_director">常務確認待ち</option>
+                            <option value="pending_senior_managing_director">専務確認待ち</option>
+                            <option value="pending_president">社長確認待ち</option>
+                            <option value="pending_ga">総務確認待ち</option>
+                            <option value="completed_confirmation">確認完了</option>
+                        </select>
                     </div>
                     
-                    <div class="filter-group filter-actions-group"> <div class="filter-checkbox-container">
+                    <div class="filter-group filter-actions-group">
+                        <div class="filter-checkbox-container">
                             <input type="checkbox" id="filterIncludeCompleted" name="include_completed" class="filter-checkbox">
                             <label for="filterIncludeCompleted" class="filter-checkbox-label">
                                 <i class="fas fa-check-double"></i> 完了分を含む
@@ -70,10 +84,7 @@
                 </div>
             </form>
             <datalist id="data-worker">
-                <!-- <option value="佐藤美咲">
-                <option value="鈴木健太">
-                <option value="高橋淳子"> -->
-            </datalist>
+                </datalist>
             
             <div class="table-meta">
                 <div class="sort-options">
@@ -86,6 +97,10 @@
                         <option value="s_name_asc">関与先商号 (昇順)</option>
                         <option value="s_name_desc">関与先商号 (降順)</option>
                     </select>
+                </div>
+                <div class="global-search-container">
+                    <i class="fas fa-search search-icon-input"></i>
+                    <input type="search" id="globalSearch" placeholder="テーブル内を検索..." class="filter-input"> 
                 </div>
             </div>
 
@@ -128,6 +143,7 @@
                 </table>
             </div>
             <div id="paginationControls" class="pagination-controls">
+                <span id="tableRowCount">Showing data 1 to 8 of 256k entries</span>
                 <div class="pagination-buttons">
                     <button>&laquo;</button>
                     <button class="active">1</button>
@@ -139,12 +155,34 @@
                     <button>&raquo;</button>
                 </div>
             </div>
-            <span id="tableRowCount">Showing data 1 to 8 of 256k entries</span>
+            <span id="tableRowCount"></span> 
         </section>
     </main>
 
     <script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
     <script src="../js/global_constants.js"></script>
     <script src="../js/script.js"></script>
+<script>
+    $(document).ready(function() {
+        $('#btnToggleFiltersIcon').on('click', function() {
+            var filtersForm = $('#mainFiltersForm');
+            var toggleButton = $(this); 
+            
+            filtersForm.slideToggle(300, function() {
+                if (filtersForm.is(':visible')) {
+                    toggleButton.attr('title', 'フィルターを隠す'); 
+                } else {
+                    toggleButton.attr('title', 'フィルターを表示'); 
+                }
+            });
+        });
+
+        if ($('#mainFiltersForm').is(':visible')) {
+            $('#btnToggleFiltersIcon').attr('title', 'フィルターを隠す');
+        } else {
+            $('#btnToggleFiltersIcon').attr('title', 'フィルターを表示');
+        }
+    });
+    </script>
 </body>
 </html>
