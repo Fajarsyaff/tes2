@@ -32,6 +32,13 @@ body {
     box-shadow: 0 2px 4px rgba(0,0,0,0.1);
 }
 
+.site-logo {
+    height: 30px; /* Sesuaikan tinggi logo Anda, lebar akan menyesuaikan proporsional */
+    /* width: auto; */ /* Biarkan auto jika tinggi sudah diatur, atau sebaliknya */
+    margin-right: 0.75rem; /* Jarak antara logo dan teks judul */
+    vertical-align: middle;
+}
+
 /* Main Content Container */
 .container {
     max-width: 100%;
