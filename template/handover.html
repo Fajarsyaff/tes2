@@ -165,25 +165,29 @@
     <script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
     <script src="../js/global_constants.js"></script>
     <script src="../js/script.js"></script>
-<script>
+    <script>
     $(document).ready(function() {
+        // Event listener for the filter toggle icon button
         $('#btnToggleFiltersIcon').on('click', function() {
-            var filtersForm = $('#mainFiltersForm');
-            var toggleButton = $(this); 
+            var filtersForm = $('#mainFiltersForm'); // The form containing the filters
+            var toggleButton = $(this); // The button that was clicked
             
+            // Animate the showing/hiding of the filter form
             filtersForm.slideToggle(300, function() {
+                // After animation completes, update the button's title attribute
                 if (filtersForm.is(':visible')) {
-                    toggleButton.attr('title', 'フィルターを隠す'); 
+                    toggleButton.attr('title', 'フィルターを隠す'); // Title: Hide Filters
                 } else {
-                    toggleButton.attr('title', 'フィルターを表示'); 
+                    toggleButton.attr('title', 'フィルターを表示'); // Title: Show Filters
                 }
             });
         });
 
+        // Set initial title for the filter toggle button based on form visibility
         if ($('#mainFiltersForm').is(':visible')) {
-            $('#btnToggleFiltersIcon').attr('title', 'フィルターを隠す');
+            $('#btnToggleFiltersIcon').attr('title', 'フィルターを隠す'); // Title: Hide Filters
         } else {
-            $('#btnToggleFiltersIcon').attr('title', 'フィルターを表示');
+            $('#btnToggleFiltersIcon').attr('title', 'フィルターを表示'); // Title: Show Filters
         }
     });
     </script>
