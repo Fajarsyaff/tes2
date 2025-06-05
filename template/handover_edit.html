@@ -7,8 +7,11 @@
     <link rel="stylesheet" href="../css/style_edit.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
 </head>
-     <header class="site-header">
-        <div class="header-title">監査業務引継書システム</div>
+    <header class="site-header">
+        <div class="header-title">
+            <img src="/asset/img/iwasaki logo.png" alt="Company Logo" class="site-logo">
+            <span>監査業務引継書システム</span> 
+        </div>
         <div class="user-info">
             <span id="loggedInUserName">氏名：(部署名)</span>
             <a href="URL_LOGOUT_ANDA" class="logout-link"><i class="fas fa-sign-out-alt"></i> ログアウト</a>
@@ -17,7 +20,7 @@
 <body>
     <div class="container">
         <header>
-            <h1>監査業務引継書 - 詳細情報編集</h1>
+            <h1>監査業務引継書</h1>
             <div class="progress-bar-container">
                 <div class="progress-bar" style="width: 30%;">提出済</div>
                 </div>
@@ -25,6 +28,7 @@
 
         <form id="handoverForm">
             <div class="action-buttons main-actions">
+                <button type="button" id="btnBackTop"><i class="fas fa-arrow-left"></i> 戻る</button> 
                 <button type="button" id="btnSubmit"><i class="fas fa-paper-plane"></i> 提出</button>
                 <button type="button" id="btnApprove"><i class="fas fa-check"></i> 承認</button>
                 <button type="button" id="btnDeny"><i class="fas fa-times"></i> 否認</button>
@@ -219,22 +223,27 @@
 
             <details class="info-group">
                 <summary>決算</summary>
-                <div class="form-grid">
-                    <div>
-                        <label for="n_interim_return">予定／中間申告有無:</label>
-                        <select id="n_interim_return" name="n_interim_return" required>
-                            <option value="1">有</option>
-                            <option value="0">無</option>
-                        </select>
+                <div class="form-grid"> <div>
+                        <label>予定／中間申告有無:</label> 
+                        <div class="radio-group">
+                            <input type="radio" id="n_interim_return_yes" name="n_interim_return" value="1" required>
+                            <label for="n_interim_return_yes">有</label>
+                            <input type="radio" id="n_interim_return_no" name="n_interim_return" value="0" required>
+                            <label for="n_interim_return_no">無</label>
+                        </div>
                     </div>
                     <div>
-                        <label for="n_consumption_tax">消費税届出:</label>
-                        <select id="n_consumption_tax" name="n_consumption_tax" required>
-                             <option value="">選択してください</option>
-                            <option value="1">課税事業者</option>
-                            <option value="2">免税事業者</option>
-                            <option value="3">その他届出あり</option>
-                        </select>
+                        <label>消費税届出:</label> 
+                        <div class="radio-group-vertical"> 
+                            <div class="radio-option">
+                                <input type="radio" id="n_consumption_tax_payer" name="n_consumption_tax" value="1" required>
+                                <label for="n_consumption_tax_payer">本則</label>
+                            </div>
+                            <div class="radio-option">
+                                <input type="radio" id="n_consumption_tax_exempt" name="n_consumption_tax" value="2" required>
+                                <label for="n_consumption_tax_exempt">簡易</label>
+                            </div>
+                        </div>
                     </div>
                     <div class="full-width">
                         <label for="s_heeding_settlement">決算時留意ポイント:</label>
@@ -480,6 +489,6 @@
     </div>
     <script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
     <script src="../js/global_constants.js"></script>
-    <script src="../js/script.js"></script>
+    <script src="../js/script_edit.js"></script>
 </body>
 </html>
