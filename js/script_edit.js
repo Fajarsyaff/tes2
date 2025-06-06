@@ -1,49 +1,49 @@
 $(document).ready(function() {
-    // Asumsi: handoverId didapatkan dari parameter URL atau cara lain saat edit
-    // Untuk data baru, handoverId bisa null atau undefined.
+    // Assumption: handoverId is obtained from URL parameters or other means during edit
+    // For new data, handoverId could be null or undefined.
     const urlParams = new URLSearchParams(window.location.search);
-    let handoverId = urlParams.get('id'); // Contoh pengambilan ID dari URL: ?id=xxx
+    let handoverId = urlParams.get('id'); // Example of getting ID from URL: ?id=xxx
 
-    // Asumsi: Informasi pengguna yang login tersedia (misalnya dari global_constants.js atau sesi)
-    // Gantilah dengan cara Anda mendapatkan informasi ini
-    const loggedInUserId = typeof LOGGED_IN_USER_ID !== 'undefined' ? LOGGED_IN_USER_ID : 'user01'; // Contoh ID
-    const loggedInUserName = typeof LOGGED_IN_USER_NAME !== 'undefined' ? LOGGED_IN_USER_NAME : 'ログインユーザー名';
-    // const loggedInUserDepartment = typeof LOGGED_IN_USER_DEPARTMENT !== 'undefined' ? LOGGED_IN_USER_DEPARTMENT : '監査部';
+    // Assumption: Logged-in user information is available (e.g., from global_constants.js or session)
+    // Replace with your method of getting this information
+    const loggedInUserId = typeof LOGGED_IN_USER_ID !== 'undefined' ? LOGGED_IN_USER_ID : 'user01'; // Example ID
+    const loggedInUserName = typeof LOGGED_IN_USER_NAME !== 'undefined' ? LOGGED_IN_USER_NAME : 'Logged-in User Name';
+    // const loggedInUserDepartment = typeof LOGGED_IN_USER_DEPARTMENT !== 'undefined' ? LOGGED_IN_USER_DEPARTMENT : 'Audit Department';
 
-    // --- INISIALISASI HALAMAN ---
+    // --- PAGE INITIALIZATION ---
     loadWorkerList();
-    loadCustomerList(); // Fungsi ini perlu Anda buat untuk memuat daftar pelanggan
-    setFixedApproverNames(); // Set nama approver yang tetap
+    loadCustomerList(); // You need to create this function to load customer list
+    setFixedApproverNames(); // Set fixed approver names
 
     if (handoverId) {
-        // Mode Edit: Muat data yang ada
+        // Edit Mode: Load existing data
         loadHandoverData(handoverId);
     } else {
-        // Mode Baru: Set beberapa default jika perlu
-        $('#s_predecessor_name').text(loggedInUserName); // Nama predecessor adalah pengguna saat ini
-        $('#dt_submitted').text(''); // Akan diisi saat submit
-        updateProgressBarBasedOnStatus('新規作成中', 0); // Progress bar awal untuk mode baru
+        // New Mode: Set some defaults if needed
+        $('#s_predecessor_name').text(loggedInUserName); // Predecessor name is current user
+        $('#dt_submitted').text(''); // Will be filled when submitted
+        updateProgressBarBasedOnStatus('New Creation', 0); // Initial progress bar for new mode
     }
 
     // --- EVENT HANDLERS ---
 
         $('#btnBackTop').on('click', function() {
-        // Logika konfirmasi yang sama bisa diterapkan di sini
-        window.location.href = 'handover.html'; // Arahkan ke handover.html
+        // Same confirmation logic can be applied here
+        window.location.href = 'handover.html'; // Redirect to handover.html
     });
 
-    // Pemilihan Pelanggan
-    $('#s_customer').on('input', function() { // 'input' event lebih baik untuk datalist
+    // Customer Selection
+    $('#s_customer').on('input', function() { // 'input' event is better for datalist
         const customerId = $(this).val();
         const selectedOption = $('#customerList option[value="' + customerId + '"]');
         
-        if (selectedOption.length > 0) { // Pastikan nilai ada di datalist
-            // Ambil detail pelanggan ( 関与先CD, 商号, 住所 )
-            // Anda perlu fungsi backend untuk ini, atau jika data sudah ada di frontend, ambil dari sana
-            // Contoh: memanggil fungsi getCustomerDetails(customerId)
-            getCustomerDetails(customerId); // Implementasikan fungsi ini
+        if (selectedOption.length > 0) { // Make sure value exists in datalist
+            // Get customer details ( 関与先CD, 商号, 住所 )
+            // You need backend function for this, or if data is already in frontend, get it from there
+            // Example: calling getCustomerDetails(customerId) function
+            getCustomerDetails(customerId); // Implement this function
         } else {
-            // Kosongkan field jika input tidak cocok dengan opsi datalist
+            // Clear fields if input doesn't match datalist options
             $('#id_tkc_cd').val('');
             $('#s_name').val('');
             $('#s_address').val('');
@@ -52,17 +52,17 @@ $(document).ready(function() {
 
     //button 
      /**
-     * Mengisi form dengan data yang diterima
-     * @param {object} data - Objek data serah terima
+     * Populates form with received data
+     * @param {object} data - Handover data object
      */
     function populateForm(data) {
-        // ... (kode populateForm Anda yang sudah ada untuk semua field lain) ...
+        // ... (your existing populateForm code for all other fields) ...
 
-        // Simpan status nilai saat ini secara global atau sebagai atribut data
-        currentHandoverStatusValue = data.status_value; // Asumsi 'status_value' adalah field dari backend
-                                                       // yang merepresentasikan status numerik (misal, 1 untuk '所属長確認待ち')
+        // Save current status value globally or as data attribute
+        currentHandoverStatusValue = data.status_value; // Assumption 'status_value' is a field from backend
+                                                       // representing numeric status (e.g., 1 for 'Waiting for Manager Approval')
 
-        // ... (sisa kode populateForm Anda untuk mengisi tanggal dan komentar yang sudah ada dari 'data')
+        // ... (rest of your populateForm code for filling dates and comments from 'data')
         $('#s_predecessor_name').text(data.s_predecessor_name || loggedInUserName);
         $('#dt_submitted').text(formatDateTime(data.dt_submitted) || '');
         
@@ -86,14 +86,14 @@ $(document).ready(function() {
 
         $('#s_in_charge').val(data.s_in_charge || '');
         
-        // Update progress bar juga di sini berdasarkan status yang dimuat
+        // Update progress bar here too based on loaded status
         updateProgressBarBasedOnStatus(currentHandoverStatusValue);
     }
 
 
     /**
-     * Mengirim data form ke server
-     * @param {string} actionType - Tipe aksi (submit, approve, deny, save_draft)
+     * Sends form data to server
+     * @param {string} actionType - Action type (submit, approve, deny, save_draft)
      */
     function submitHandover(actionType) {
         if (!confirm(getConfirmationMessage(actionType))) {
@@ -117,10 +117,10 @@ $(document).ready(function() {
             params.s_predecessor = loggedInUserId;
         }
 
-        // --- Optimistic UI Update untuk Timestamp jika 'approve' ---
+        // --- Optimistic UI Update for Timestamp if 'approve' ---
         if (actionType === 'approve') {
             const now = new Date();
-            // Membuat format YYYY-MM-DD HH:MM:SS untuk konsistensi dengan formatDateTime
+            // Create YYYY-MM-DD HH:MM:SS format for consistency with formatDateTime
             const year = now.getFullYear();
             const month = ('0' + (now.getMonth() + 1)).slice(-2);
             const day = ('0' + now.getDate()).slice(-2);
@@ -129,98 +129,98 @@ $(document).ready(function() {
             const seconds = ('0' + now.getSeconds()).slice(-2);
             const dbFormatTimestamp = `${year}-${month}-${day} ${hours}:${minutes}:${seconds}`;
             
-            const formattedTimestamp = formatDateTime(dbFormatTimestamp); // Menggunakan fungsi format yang sudah ada
+            const formattedTimestamp = formatDateTime(dbFormatTimestamp); // Using existing format function
 
-            // Tentukan span mana yang akan diupdate berdasarkan status SEBELUM approval ini.
-            // `currentHandoverStatusValue` harus mencerminkan status saat tombol "Approve" diklik.
-            // Logika ini mengasumsikan bahwa pengguna yang menekan "Approve" adalah approver yang sesuai
-            // untuk `currentHandoverStatusValue`.
+            // Determine which span to update based on status BEFORE this approval.
+            // `currentHandoverStatusValue` should reflect status when "Approve" button is clicked.
+            // This logic assumes that the user clicking "Approve" is the appropriate approver
+            // for `currentHandoverStatusValue`.
             let targetTimestampSpanId = null;
-            let targetCommentSpanId = null; // Juga update komentar secara optimis
+            let targetCommentSpanId = null; // Also update comment optimistically
 
-            // Mapping status (SEBELUM approval) ke field yang akan diisi SEKARANG
-            // Nilai status ini adalah status dokumen SEBELUM aksi approve ini.
-            // Misalnya, jika currentHandoverStatusValue adalah 1 ('所属長確認待ち'),
-            // berarti '所属長' yang sedang melakukan approval, dan timestamp untuk '所属長' akan diisi.
+            // Mapping status (BEFORE approval) to fields to be filled NOW
+            // These status values are document status BEFORE this approve action.
+            // For example, if currentHandoverStatusValue is 1 ('Waiting for Manager Approval'),
+            // then 'Manager' is currently approving, and timestamp for 'Manager' will be filled.
             switch (parseInt(currentHandoverStatusValue)) {
-                case 1: // Jika status "所属長確認待ち", maka dt_approved (milik所属長) yang diisi
+                case 1: // If status "Waiting for Manager Approval", then dt_approved (Manager's) is filled
                     targetTimestampSpanId = '#dt_approved_superior';
                     targetCommentSpanId = '#s_approved_comment';
                     break;
-                case 2: // Jika status "部長確認待ち", maka dt_approved_1 (milik 部長) yang diisi
+                case 2: // If status "Waiting for Department Head Approval", then dt_approved_1 (Department Head's) is filled
                     targetTimestampSpanId = '#dt_approved_1';
                     targetCommentSpanId = '#s_approved_1_comment';
                     break;
-                case 3: // "取締役確認待ち" -> dt_approved_2
+                case 3: // "Waiting for Director Approval" -> dt_approved_2
                     targetTimestampSpanId = '#dt_approved_2';
                     targetCommentSpanId = '#s_approved_2_comment';
                     break;
-                case 4: // "常務確認待ち" -> dt_approved_3
+                case 4: // "Waiting for Managing Director Approval" -> dt_approved_3
                     targetTimestampSpanId = '#dt_approved_3';
                     targetCommentSpanId = '#s_approved_3_comment';
                     break;
-                case 5: // "専務確認待ち" -> dt_approved_4
+                case 5: // "Waiting for Senior Managing Director Approval" -> dt_approved_4
                     targetTimestampSpanId = '#dt_approved_4';
                     targetCommentSpanId = '#s_approved_4_comment';
                     break;
-                case 6: // "社長確認待ち" -> dt_approved_5
+                case 6: // "Waiting for President Approval" -> dt_approved_5
                     targetTimestampSpanId = '#dt_approved_5';
                     targetCommentSpanId = '#s_approved_5_comment';
                     break;
-                case 7: // "総務確認待ち" -> dt_checked
+                case 7: // "Waiting for General Affairs Approval" -> dt_checked
                     targetTimestampSpanId = '#dt_checked';
                     targetCommentSpanId = '#s_checked_comment';
                     break;
-                // Tidak ada case untuk predecessor (dt_submitted) karena itu dihandle oleh 'submit'
-                // Tidak ada case untuk 후임자 karena tidak ada timestamp approval
+                // No case for predecessor (dt_submitted) because handled by 'submit'
+                // No case for successor because there's no approval timestamp
             }
 
             if (targetTimestampSpanId) {
                 $(targetTimestampSpanId).text(formattedTimestamp);
             }
             if (targetCommentSpanId && $('#approvalComment').val().trim() !== '') {
-                 // Hanya update jika ada komentar yang diinput
+                 // Only update if there's input comment
                 $(targetCommentSpanId).text($('#approvalComment').val());
             }
         }
-        // --- Akhir Optimistic UI Update ---
+        // --- End of Optimistic UI Update ---
 
         callAjax(params, function(response) {
-            alert(response.message || '処理が完了しました。');
+            alert(response.message || 'Processing completed.');
             if (response.success) {
                 if (response.new_id) {
                     handoverId = response.new_id;
                     window.history.replaceState({}, '', `?id=${handoverId}`);
                 }
-                // Muat ulang data dari server untuk mendapatkan data yang paling akurat dan status baru
-                // Ini akan mengkonfirmasi/mengganti timestamp yang diupdate secara optimis.
+                // Reload data from server to get most accurate data and new status
+                // This will confirm/replace optimistically updated timestamps.
                 loadHandoverData(handoverId); 
 
                 if (actionType === 'submit' || actionType === 'approve') {
                     const mailParams = {
                         mail_fr: typeof FROM_EMAIL !== 'undefined' ? FROM_EMAIL : 'sistem@example.com',
-                        name_to: 'Penerima Notifikasi Berikutnya', // Perlu logika untuk menentukan ini
-                        mail_to: 'penerima.berikutnya@example.com', // Perlu logika untuk menentukan ini
+                        name_to: 'Next Notification Recipient', // Need logic to determine this
+                        mail_to: 'next.recipient@example.com', // Need logic to determine this
                         mail_cc: typeof CC_EMAIL !== 'undefined' ? CC_EMAIL : '',
                         customer_name: $('#s_name').val() || 'N/A',
-                        status: response.new_status_text || actionType // Backend sebaiknya mengirim teks status baru
+                        status: response.new_status_text || actionType // Backend should send new status text
                     };
                     sendEmailNotification(mailParams);
                 }
-                $('#approvalComment').val(''); // Kosongkan komentar setelah berhasil
+                $('#approvalComment').val(''); // Clear comment after success
             } else {
-                // Jika update gagal, mungkin idealnya muat ulang data asli untuk membatalkan optimistic update
+                // If update fails, maybe reload original data to undo optimistic update
                 if (handoverId) {
-                    console.warn("Update gagal, memuat ulang data asli.");
-                    loadHandoverData(handoverId); // Muat ulang data sebelum optimistic update
+                    console.warn("Update failed, reloading original data.");
+                    loadHandoverData(handoverId); // Reload data before optimistic update
                 }
             }
         });
     }
 
-    // ... (sisa fungsi Anda: getConfirmationMessage, sendEmailNotification, callAjax, formatDateTime, setFixedApproverNames, updateProgressBar, updateProgressBarBasedOnStatus)
+    // ... (rest of your functions: getConfirmationMessage, sendEmailNotification, callAjax, formatDateTime, setFixedApproverNames, updateProgressBar, updateProgressBarBasedOnStatus)
 
-    // Tombol Aksi Utama
+    // Main Action Buttons
     $('#btnSubmit').on('click', function() {
         submitHandover('submit');
     });
@@ -238,15 +238,15 @@ $(document).ready(function() {
     });
 
     $('#btnReset').on('click', function() {
-        if (confirm('フォームの内容をリセットしますか？')) {
+        if (confirm('Reset form contents?')) {
             $('#handoverForm')[0].reset();
             if (handoverId) {
-                loadHandoverData(handoverId); // Muat ulang data asli jika sedang edit
+                loadHandoverData(handoverId); // Reload original data if editing
             } else {
-                // Reset ke default mode baru
+                // Reset to new mode defaults
                 $('#s_predecessor_name').text(loggedInUserName);
-                updateProgressBar('新規作成中', 0);
-                 // Kosongkan field yang diisi otomatis oleh pemilihan customer
+                updateProgressBar('New Creation', 0);
+                 // Clear fields auto-filled by customer selection
                 $('#id_tkc_cd').val('');
                 $('#s_name').val('');
                 $('#s_address').val('');
@@ -255,39 +255,39 @@ $(document).ready(function() {
     });
 
 
-    // --- FUNGSI-FUNGSI ---
+    // --- FUNCTIONS ---
 
     /**
-     * Memuat data serah terima yang ada ke form
-     * @param {string} id - ID serah terima
+     * Loads existing handover data into form
+     * @param {string} id - Handover ID
      */
     function loadHandoverData(id) {
-        // Panggil fungsi getHandoverData dari spesifikasi [cite: 21]
+        // Call getHandoverData function from specification [cite: 21]
         callAjax({ action: 'getHandoverData', id: id }, function(response) {
             if (response && response.success && response.data) {
                 populateForm(response.data);
-                updateProgressBarBasedOnStatus(response.data.status_value); // Anda perlu field status_value dari backend
-                // Set nama predecessor (jika berbeda dari loggedInUser saat ini, misal saat viewing/approving)
-                if(response.data.s_predecessor_name) { // Asumsi backend mengirim nama predecessor
+                updateProgressBarBasedOnStatus(response.data.status_value); // You need status_value field from backend
+                // Set predecessor name (if different from current loggedInUser, e.g., when viewing/approving)
+                if(response.data.s_predecessor_name) { // Assumption backend sends predecessor name
                     $('#s_predecessor_name').text(response.data.s_predecessor_name);
                 } else {
-                     $('#s_predecessor_name').text(loggedInUserName); // Default jika tidak ada
+                     $('#s_predecessor_name').text(loggedInUserName); // Default if none
                 }
             } else {
-                alert('データの読み込みに失敗しました。' + (response ? response.message : ''));
+                alert('Failed to load data.' + (response ? response.message : ''));
             }
         });
     }
 
     /**
-     * Mengisi form dengan data yang diterima
-     * @param {object} data - Objek data serah terima
+     * Populates form with received data
+     * @param {object} data - Handover data object
      */
     function populateForm(data) {
         $('#s_customer').val(data.s_customer || '');
         $('#id_tkc_cd').val(data.id_tkc_cd || '');
         $('#s_name').val(data.s_name || '');
-        $('#s_address').val(data.s_address || ''); // Ini akan diisi dari s_address_1 + s_building_1
+        $('#s_address').val(data.s_address || ''); // This will be filled from s_address_1 + s_building_1
         $('#s_type').val(data.s_type || '');
         $('#dt_from').val(data.dt_from || '');
         $('#dt_to').val(data.dt_to || '');
@@ -330,7 +330,7 @@ $(document).ready(function() {
         $('#dt_last_tax_audit').val(data.dt_last_tax_audit || '');
         $('#s_tax_audit_memo').val(data.s_tax_audit_memo || '');
 
-        // Untuk field Ya/Tidak (TINYINT(1)) yang menggunakan <select>
+        // For Yes/No fields (TINYINT(1)) using <select>
         setSelectYesNoValue('n_exemption_for_dependents', data.n_exemption_for_dependents);
         $('#s_exemption_for_dependents').val(data.s_exemption_for_dependents || '');
         setSelectYesNoValue('n_last_year_end_adjustment', data.n_last_year_end_adjustment);
@@ -342,7 +342,7 @@ $(document).ready(function() {
         setSelectYesNoValue('n_deadline_exceptions', data.n_deadline_exceptions);
         $('#s_deadline_exceptions').val(data.s_deadline_exceptions || '');
         // Field #50 (n_late_payment for withholding tax)
-        setSelectYesNoValue('n_late_payment_withholding', data.n_late_payment_withholding); // Sesuaikan nama field dari backend jika berbeda
+        setSelectYesNoValue('n_late_payment_withholding', data.n_late_payment_withholding); // Adjust field name from backend if different
         $('#s_late_payment_withholding').val(data.s_late_payment_withholding || ''); // Field #51 (s_late_payment for withholding tax remarks)
 
         setSelectYesNoValue('n_depreciable_assets_tax', data.n_depreciable_assets_tax);
@@ -355,22 +355,22 @@ $(document).ready(function() {
         $('#n_employment_insurance').val(data.n_employment_insurance !== null ? data.n_employment_insurance.toString() : '');
         $('#n_workers_accident_insurance').val(data.n_workers_accident_insurance !== null ? data.n_workers_accident_insurance.toString() : '');
         // Field #60 (n_late_payment for social insurance)
-        setSelectYesNoValue('n_late_payment_social', data.n_late_payment_social); // Sesuaikan nama field dari backend jika berbeda
+        setSelectYesNoValue('n_late_payment_social', data.n_late_payment_social); // Adjust field name from backend if different
         
         $('#n_greetings_method').val(data.n_greetings_method !== null ? data.n_greetings_method.toString() : '');
         $('#s_special_notes').val(data.s_special_notes || '');
         $('#s_other_notes').val(data.s_other_notes || '');
 
         // Approval Status Section
-        // $('#s_predecessor_name').text(data.s_predecessor_name || loggedInUserName); // s_predecessor_name dari backend atau default
+        // $('#s_predecessor_name').text(data.s_predecessor_name || loggedInUserName); // s_predecessor_name from backend or default
         $('#dt_submitted').text(formatDateTime(data.dt_submitted) || '');
         
-        $('#s_superior').val(data.s_superior || ''); // ID atasan
-        // Anda mungkin perlu getWorkerData(data.s_superior) untuk menampilkan nama jika datalist hanya berisi ID
+        $('#s_superior').val(data.s_superior || ''); // Superior ID
+        // You might need getWorkerData(data.s_superior) to display name if datalist only contains IDs
         $('#dt_approved_superior').text(formatDateTime(data.dt_approved) || '');
         $('#s_approved_comment').text(data.s_approved || '');
 
-        // Nama approver tetap akan diset oleh setFixedApproverNames()
+        // Fixed approver names will be set by setFixedApproverNames()
         $('#dt_approved_1').text(formatDateTime(data.dt_approved_1) || '');
         $('#s_approved_1_comment').text(data.s_approved_1 || '');
         $('#dt_approved_2').text(formatDateTime(data.dt_approved_2) || '');
@@ -385,27 +385,27 @@ $(document).ready(function() {
         $('#dt_checked').text(formatDateTime(data.dt_checked) || '');
         $('#s_checked_comment').text(data.s_checked || '');
 
-        $('#s_in_charge').val(data.s_in_charge || ''); // ID pengganti
-        // Anda mungkin perlu getWorkerData(data.s_in_charge) untuk menampilkan nama
+        $('#s_in_charge').val(data.s_in_charge || ''); // Successor ID
+        // You might need getWorkerData(data.s_in_charge) to display name
     }
 
     /**
-     * Helper function untuk set value select Ya/Tidak
+     * Helper function to set Yes/No select value
      */
     function setSelectYesNoValue(selectId, value) {
         if (value !== null && value !== undefined) {
             $('#' + selectId).val(value.toString());
         } else {
-            $('#' + selectId).val(''); // Atau default ke '0' (Tidak) jika lebih sesuai
+            $('#' + selectId).val(''); // Or default to '0' (No) if more appropriate
         }
     }
 
 
     /**
-     * Memuat daftar pekerja ke datalist
+     * Loads worker list into datalist
      */
     function loadWorkerList() {
-        // Panggil fungsi getWorkerList dari spesifikasi [cite: 21]
+        // Call getWorkerList function from specification [cite: 21]
         callAjax({ action: 'getWorkerList' }, function(response) {
             if (response && response.success && response.data) {
                 const superiorDatalist = $('#workerList_superior');
@@ -413,9 +413,9 @@ $(document).ready(function() {
                 superiorDatalist.empty();
                 inChargeDatalist.empty();
                 response.data.forEach(function(worker) {
-                    // Spesifikasi menyebutkan (id_worker: s_lname s_fname) [cite: 21]
-                    // Tapi di tabel v_worker (source 10), ada s_worker dan user_name
-                    // Asumsi backend mengirim format: { s_worker: 'id', user_name: 'nama lengkap' }
+                    // Specification mentions (id_worker: s_lname s_fname) [cite: 21]
+                    // But in v_worker table (source 10), there's s_worker and user_name
+                    // Assumption backend sends format: { s_worker: 'id', user_name: 'full name' }
                     superiorDatalist.append(`<option value="${worker.s_worker}">${worker.user_name}</option>`);
                     inChargeDatalist.append(`<option value="${worker.s_worker}">${worker.user_name}</option>`);
                 });
@@ -424,17 +424,17 @@ $(document).ready(function() {
     }
 
     /**
-     * Memuat daftar pelanggan ke datalist
+     * Loads customer list into datalist
      */
     function loadCustomerList() {
-        // Ini memerlukan fungsi backend baru (misal 'getCustomerListForDatalist')
-        // yang mengambil data dari v_customer (s_customer, s_corp_name) [cite: 7, 8]
+        // This requires new backend function (e.g., 'getCustomerListForDatalist')
+        // that gets data from v_customer (s_customer, s_corp_name) [cite: 7, 8]
         callAjax({ action: 'getCustomerListForDatalist' }, function(response) {
             if (response && response.success && response.data) {
                 const customerDatalist = $('#customerList');
                 customerDatalist.empty();
                 response.data.forEach(function(customer) {
-                    // Asumsi backend mengirim format: { s_customer: 'id', s_corp_name: 'nama perusahaan' }
+                    // Assumption backend sends format: { s_customer: 'id', s_corp_name: 'company name' }
                     customerDatalist.append(`<option value="${customer.s_customer}">${customer.s_corp_name}</option>`);
                 });
             }
@@ -442,22 +442,22 @@ $(document).ready(function() {
     }
     
     /**
-     * Mengambil detail pelanggan setelah dipilih
+     * Gets customer details after selection
      * @param {string} customerId
      */
     function getCustomerDetails(customerId) {
-        // Ini memerlukan fungsi backend baru (misal 'getCustomerDetailsById')
-        // yang mengambil data dari v_customer berdasarkan s_customer [cite: 7, 8, 9]
+        // This requires new backend function (e.g., 'getCustomerDetailsById')
+        // that gets data from v_customer based on s_customer [cite: 7, 8, 9]
         callAjax({ action: 'getCustomerDetailsById', s_customer: customerId }, function(response) {
             if (response && response.success && response.data) {
                 $('#id_tkc_cd').val(response.data.id_tkc_cd || '');
-                $('#s_name').val(response.data.s_corp_name || ''); // dari v_customer
-                // Alamat: concat(s_address_1, s_building_1)
+                $('#s_name').val(response.data.s_corp_name || ''); // from v_customer
+                // Address: concat(s_address_1, s_building_1)
                 const address = (response.data.s_address_1 || '') + (response.data.s_building_1 || '');
                 $('#s_address').val(address);
             } else {
-                // Mungkin tampilkan error atau biarkan kosong
-                console.warn('Gagal mengambil detail pelanggan atau data tidak ditemukan.');
+                // Maybe show error or leave empty
+                console.warn('Failed to get customer details or data not found.');
                 $('#id_tkc_cd').val('');
                 $('#s_name').val('');
                 $('#s_address').val('');
@@ -467,8 +467,8 @@ $(document).ready(function() {
 
 
     /**
-     * Mengirim data form ke server
-     * @param {string} actionType - Tipe aksi (submit, approve, deny, save_draft)
+     * Sends form data to server
+     * @param {string} actionType - Action type (submit, approve, deny, save_draft)
      */
     function submitHandover(actionType) {
         if (!confirm(getConfirmationMessage(actionType))) {
@@ -477,59 +477,59 @@ $(document).ready(function() {
 
         const formData = $('#handoverForm').serializeArray();
         let params = {
-            action: 'updateHandoverData', // Sesuai spesifikasi fungsi jQuery [cite: 21]
-            action_type: actionType, // Untuk membedakan aksi di backend
-            id: handoverId // Kirim ID jika sedang edit, bisa null untuk baru
+            action: 'updateHandoverData', // According to jQuery function specification [cite: 21]
+            action_type: actionType, // To differentiate action in backend
+            id: handoverId // Send ID if editing, could be null for new
         };
 
-        // Ubah serializeArray menjadi objek
+        // Convert serializeArray to object
         formData.forEach(function(item) {
             params[item.name] = item.value;
         });
 
-        // Tambahkan komentar approval jika ada
-        params.approval_comment_text = $('#approvalComment').val(); // Nama parameter ini perlu disesuaikan dengan backend
-                                                                 // untuk disimpan ke s_approved, s_approved_1, dll.
-                                                                 // tergantung siapa yang melakukan aksi.
+        // Add approval comment if exists
+        params.approval_comment_text = $('#approvalComment').val(); // This parameter name needs to match backend
+                                                                 // to be saved to s_approved, s_approved_1, etc.
+                                                                 // depending on who performs the action.
 
-        // Tambahkan ID pengguna yang melakukan aksi (penting untuk approval)
+        // Add ID of user performing action (important for approval)
         params.actor_user_id = loggedInUserId;
 
 
-        // Jika ini adalah data baru dan merupakan 'submit' pertama,
-        // s_predecessor harus diisi dengan loggedInUserId
+        // If this is new data and first 'submit',
+        // s_predecessor should be filled with loggedInUserId
         if (!handoverId && actionType === 'submit') {
             params.s_predecessor = loggedInUserId;
         }
 
 
         callAjax(params, function(response) {
-            alert(response.message || '処理が完了しました。'); // Sesuai spesifikasi: "更新結果をアラート表示" [cite: 21]
+            alert(response.message || 'Processing completed.'); // According to specification: "Show update result in alert" [cite: 21]
             if (response.success) {
-                if (response.new_id) { // Jika ini pembuatan baru dan backend mengembalikan ID baru
+                if (response.new_id) { // If this is new creation and backend returns new ID
                     handoverId = response.new_id;
-                     // Update URL jika ingin, atau reload data
-                    window.history.replaceState({}, '', `?id=${handoverId}`); // Ganti URL tanpa reload
+                     // Update URL if desired, or reload data
+                    window.history.replaceState({}, '', `?id=${handoverId}`); // Change URL without reload
                 }
-                // Muat ulang data untuk melihat perubahan
+                // Reload data to see changes
                 loadHandoverData(handoverId); 
 
-                // Kirim email jika submit atau approve (sesuaikan kondisi)
+                // Send email if submit or approve (adjust conditions)
                 if (actionType === 'submit' || actionType === 'approve') {
-                    // Siapkan parameter untuk sendMail [cite: 21]
-                    // Ini memerlukan logika tambahan untuk menentukan mail_to, name_to, status, dll.
-                    // Contoh sederhana:
+                    // Prepare parameters for sendMail [cite: 21]
+                    // This requires additional logic to determine mail_to, name_to, status, etc.
+                    // Simple example:
                     const mailParams = {
-                        mail_fr: 'sistem@perusahaan.com', // Ambil dari konfigurasi
-                        name_to: 'Penerima Notifikasi', // Perlu ditentukan
-                        mail_to: 'penerima@perusahaan.com', // Perlu ditentukan
+                        mail_fr: 'system@company.com', // Get from configuration
+                        name_to: 'Notification Recipient', // Needs to be determined
+                        mail_to: 'recipient@company.com', // Needs to be determined
                         mail_cc: '',
                         customer_name: $('#s_name').val(),
-                        status: response.new_status || actionType // Status baru dari backend atau tipe aksi
+                        status: response.new_status || actionType // New status from backend or action type
                     };
                     sendEmailNotification(mailParams);
                 }
-                 // Kosongkan field komentar setelah berhasil
+                 // Clear comment field after success
                 $('#approvalComment').val('');
             }
         });
@@ -537,39 +537,39 @@ $(document).ready(function() {
     
     function getConfirmationMessage(actionType) {
         switch(actionType) {
-            case 'submit': return 'この内容で提出しますか？';
-            case 'approve': return 'この内容を承認しますか？';
-            case 'deny': return 'この内容を否認しますか？コメントを記入してください。';
-            case 'save_draft': return 'この内容を一時保存しますか？';
-            default: return '実行しますか？';
+            case 'submit': return 'Submit with this content?';
+            case 'approve': return 'Approve this content?';
+            case 'deny': return 'Deny this content? Please enter a comment.';
+            case 'save_draft': return 'Save this content temporarily?';
+            default: return 'Execute?';
         }
     }
 
 
     /**
-     * Mengirim notifikasi email
-     * @param {object} mailParams - Parameter untuk fungsi sendMail [cite: 21]
+     * Sends email notification
+     * @param {object} mailParams - Parameters for sendMail function [cite: 21]
      */
     function sendEmailNotification(mailParams) {
         const params = { action: 'sendMail', ...mailParams };
         callAjax(params, function(response) {
             if (response && response.success) {
-                console.log('Email notifikasi berhasil dikirim.');
+                console.log('Email notification sent successfully.');
             } else {
-                console.error('Gagal mengirim email notifikasi: ' + (response ? response.message : ''));
+                console.error('Failed to send email notification: ' + (response ? response.message : ''));
             }
         });
     }
     
     /**
-     * Fungsi pembungkus untuk panggilan AJAX
-     * @param {object} dataToSend - Data yang dikirim ke server (termasuk 'action')
-     * @param {function} callback - Fungsi yang dijalankan setelah AJAX selesai
+     * Wrapper function for AJAX calls
+     * @param {object} dataToSend - Data to send to server (including 'action')
+     * @param {function} callback - Function to execute after AJAX completes
      */
     function callAjax(dataToSend, callback) {
         $.ajax({
             type: 'POST',
-            url: '../bin/handover.php', // Sesuai struktur direktori [cite: 23]
+            url: '../bin/handover.php', // According to directory structure [cite: 23]
             data: dataToSend,
             dataType: 'json',
             success: function(response) {
@@ -579,19 +579,19 @@ $(document).ready(function() {
             },
             error: function(xhr, status, error) {
                 console.error("AJAX Error:", status, error, xhr.responseText);
-                alert('サーバーとの通信に失敗しました。');
+                alert('Failed to communicate with server.');
                 if (typeof callback === 'function') {
-                    // Kirim respons error standar ke callback jika ada
-                    callback({ success: false, message: 'サーバーエラー: ' + error });
+                    // Send standard error response to callback if exists
+                    callback({ success: false, message: 'Server error: ' + error });
                 }
             }
         });
     }
 
     /**
-     * Memformat tanggal dan waktu
-     * @param {string} dateTimeStr - String tanggal waktu dari DB (YYYY-MM-DD HH:MM:SS)
-     * @returns {string} - String yang diformat (YYYY.MM.DD HH:MM:SS) atau string kosong
+     * Formats date and time
+     * @param {string} dateTimeStr - Date time string from DB (YYYY-MM-DD HH:MM:SS)
+     * @returns {string} - Formatted string (YYYY.MM.DD HH:MM:SS) or empty string
      */
     function formatDateTime(dateTimeStr) {
         if (!dateTimeStr || dateTimeStr === '0000-00-00 00:00:00') {
@@ -609,55 +609,55 @@ $(document).ready(function() {
             const seconds = ('0' + date.getSeconds()).slice(-2);
             return `${year}.${month}.${day} ${hours}:${minutes}:${seconds}`;
         } catch (e) {
-            return ''; // Jika terjadi error saat parsing
+            return ''; // If error occurs during parsing
         }
     }
 
     /**
-     * Mengatur nama approver yang tetap
+     * Sets fixed approver names
      */
     function setFixedApproverNames() {
-        // Sesuai feedback: "部長以降は固定のため、氏名をテキスト表示"
-        // Anda perlu mengisi nama-nama ini dari konfigurasi atau hardcode jika benar-benar tetap
-        $('#bucho_name').text('山田 部長'); // Contoh
-        $('#torishimariyaku_name').text('佐藤 取締役'); // Contoh
-        $('#jomu_name').text('鈴木 常務'); // Contoh
-        $('#senmu_name').text('高橋 専務'); // Contoh
-        $('#shacho_name').text('田中 社長'); // Contoh
-        // Untuk "総務担当", bisa diisi sesuai kebutuhan
+        // According to feedback: "Department head and above are fixed, so display names as text"
+        // You need to fill these names from configuration or hardcode if truly fixed
+        $('#bucho_name').text('Yamada Department Head'); // Example
+        $('#torishimariyaku_name').text('Sato Director'); // Example
+        $('#jomu_name').text('Suzuki Managing Director'); // Example
+        $('#senmu_name').text('Takahashi Senior Managing Director'); // Example
+        $('#shacho_name').text('Tanaka President'); // Example
+        // For "General Affairs", fill as needed
     }
 
 /**
- * Memperbarui progress bar gaya CHEVRON berdasarkan status dari backend
- * @param {string|number} statusValue - Nilai status dari backend
+ * Updates CHEVRON style progress bar based on status from backend
+ * @param {string|number} statusValue - Status value from backend
  */
 function updateProgressBarBasedOnStatus(statusValue) {
-    // Karena status "Ditolak" (9) kembali ke "Draft" (0), kita samakan nilainya untuk UI
+    // Since "Rejected" status (9) returns to "Draft" (0), we make their values equal for UI
     const currentStep = (parseInt(statusValue) === 9) ? 0 : parseInt(statusValue);
 
-    // Loop melalui setiap langkah pada stepper
+    // Loop through each step in stepper
     $('.chevron-stepper .step-item').each(function() {
         const stepValue = parseInt($(this).data('step'));
         
-        // Hapus semua class status terlebih dahulu
+        // Remove all status classes first
         $(this).removeClass('active completed');
 
         if (stepValue < currentStep) {
-            // Jika langkah ini sudah dilewati, tandai sebagai 'completed'
+            // If this step is already passed, mark as 'completed'
             $(this).addClass('completed');
         } else if (stepValue === currentStep) {
-            // Jika ini adalah langkah saat ini, tandai sebagai 'active'
+            // If this is current step, mark as 'active'
             $(this).addClass('active');
         }
     });
 
-    // Kasus khusus jika statusnya "Selesai" (8)
+    // Special case if status is "Completed" (8)
     if (currentStep === 8) {
         $('.chevron-stepper .step-item').removeClass('active').addClass('completed');
     }
 }
 
-    // Set nama pengguna yang login di header
-    $('#loggedInUserName').text(`${loggedInUserName} (${typeof LOGGED_IN_USER_DEPARTMENT !== 'undefined' ? LOGGED_IN_USER_DEPARTMENT : '部署'})`);
+    // Set logged-in user name in header
+    $('#loggedInUserName').text(`${loggedInUserName} (${typeof LOGGED_IN_USER_DEPARTMENT !== 'undefined' ? LOGGED_IN_USER_DEPARTMENT : 'Department'})`);
 
 });
