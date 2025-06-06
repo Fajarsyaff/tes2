@@ -150,13 +150,18 @@ header h1 {
 
 .info-group summary {
     padding: 12px 15px;
-    background-color: #f0f3f5;
+    background-color:rgb(255, 255, 255);
     font-weight: bold;
     cursor: pointer;
     border-bottom: 1px solid #d1d8e0;
     list-style: none; /* Remove default marker */
     position: relative;
     border-radius: 10px;
+     color: #143996;
+}
+
+.info-group summary:hover {
+    color: #3190DA; /* Contoh: Warna berubah menjadi biru terang saat disentuh mouse */
 }
 
 .info-group summary::-webkit-details-marker {
@@ -335,6 +340,10 @@ button[type="reset"] {
 
 #btnDeny {
     background-color: #e74c3c; /* Merah */
+    color: white;
+}
+#btnBackTop {
+    background-color: #143996; /* Merah */
     color: white;
 }
 #btnDeny:hover {
@@ -590,4 +599,105 @@ textarea {
     .action-buttons button, .main-actions textarea {
         width: 100%;
     }
+}
+
+/* Styling Baru untuk Chevron Stepper dengan Border Putih */
+.chevron-stepper {
+    display: flex;
+    justify-content: flex-start; /* Mulai dari kiri */
+    list-style: none;
+    padding: 0;
+    margin: 20px 0;
+}
+
+.step-item {
+    /* Layout dan Teks */
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding: 0 0 0 25px; /* Beri padding kiri untuk ruang dari panah sebelumnya */
+    height: 40px;
+    text-align: center;
+    color: white;
+    font-weight: 500;
+    font-size: 0.85em;
+
+    /* Ukuran dan Posisi */
+    flex: 1; /* Setiap item mengambil ruang yang sama */
+    position: relative;
+
+    /* Transisi untuk perubahan warna */
+    transition: background-color 0.4s;
+    
+    /* Warna default untuk tahap belum aktif */
+    background-color: #3190DA;
+}
+
+/* Membuat bentuk panah di sisi KANAN */
+.step-item::after {
+    content: '';
+    position: absolute;
+    top: 0;
+    right: -20px; /* Posisi panah di luar kotak utama (setengah tinggi) */
+    width: 0;
+    height: 0;
+    z-index: 1; /* Pastikan di atas layer border putih */
+
+    /* Teknik border untuk membuat segitiga */
+    border-top: 20px solid transparent; /* Setengah tinggi */
+    border-bottom: 20px solid transparent; /* Setengah tinggi */
+    border-left: 20px solid #3190DA; /* Warna panah sama dengan background */
+}
+
+/* Membuat BORDER PUTIH tebal di sisi KIRI */
+.step-item::before {
+    content: '';
+    position: absolute;
+    top: -3px; /* Posisi border, sedikit offset untuk ketebalan */
+    left: 0;
+    width: 0;
+    height: 0;
+    
+    /* Teknik border untuk membuat segitiga border */
+    border-top: 23px solid transparent; /* Setengah tinggi + ketebalan */
+    border-bottom: 23px solid transparent; /* Setengah tinggi + ketebalan */
+    border-left: 23px solid white; /* Warna border putih */
+}
+
+/* Sembunyikan border kiri pada item pertama */
+.step-item:first-child::before {
+    display: none;
+}
+.step-item:first-child {
+    padding-left: 15px; /* Atur padding untuk item pertama */
+    border-top-left-radius: 5px;
+    border-bottom-left-radius: 5px;
+}
+.step-item:last-child {
+    border-top-right-radius: 5px;
+    border-bottom-right-radius: 5px;
+}
+/* Sembunyikan panah kanan pada item terakhir */
+.step-item:last-child::after {
+    display: none;
+}
+
+
+/* Styling untuk status */
+.step-item.completed {
+    background-color: #6c757d; /* Abu-abu */
+}
+.step-item.completed::after {
+    border-left-color: #6c757d; /* Sesuaikan warna panah */
+}
+
+.step-item.active {
+    background-color: #143996; /* Biru Tua */
+}
+.step-item.active::after {
+    border-left-color: #143996; /* Sesuaikan warna panah */
+}
+
+.step-item span {
+    pointer-events: none;
 }

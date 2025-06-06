@@ -22,7 +22,7 @@ $(document).ready(function() {
         // Mode Baru: Set beberapa default jika perlu
         $('#s_predecessor_name').text(loggedInUserName); // Nama predecessor adalah pengguna saat ini
         $('#dt_submitted').text(''); // Akan diisi saat submit
-        updateProgressBar('新規作成中', 0); // Progress bar awal untuk mode baru
+        updateProgressBarBasedOnStatus('新規作成中', 0); // Progress bar awal untuk mode baru
     }
 
     // --- EVENT HANDLERS ---
@@ -627,49 +627,35 @@ $(document).ready(function() {
         // Untuk "総務担当", bisa diisi sesuai kebutuhan
     }
 
-    /**
-     * Memperbarui progress bar
-     * @param {string} statusText - Teks status (misal: "提出済")
-     * @param {number} percentage - Persentase (0-100)
-     */
-    function updateProgressBar(statusText, percentage) {
-        const progressBar = $('.progress-bar');
-        progressBar.css('width', percentage + '%');
-        progressBar.text(statusText + ' (' + percentage + '%)');
-    }
-    
-    /**
-     * Memperbarui progress bar berdasarkan status dari backend
-     * Anda perlu mendefinisikan logika status dan persentasenya
-     * @param {string|number} statusValue - Nilai status dari backend
-     */
-    function updateProgressBarBasedOnStatus(statusValue) {
-        let statusText = '不明';
-        let percentage = 0;
+/**
+ * Memperbarui progress bar gaya CHEVRON berdasarkan status dari backend
+ * @param {string|number} statusValue - Nilai status dari backend
+ */
+function updateProgressBarBasedOnStatus(statusValue) {
+    // Karena status "Ditolak" (9) kembali ke "Draft" (0), kita samakan nilainya untuk UI
+    const currentStep = (parseInt(statusValue) === 9) ? 0 : parseInt(statusValue);
 
-        // Contoh logika status (sesuaikan dengan definisi status Anda)
-        // Misal: 0=Draft, 1=Diajukan ke Atasan, 2=Disetujui Atasan, ..., 7=Selesai
-        switch (parseInt(statusValue)) {
-            case 0: statusText = '下書き'; percentage = 10; break;
-            case 1: statusText = '所属長確認待ち'; percentage = 20; break; // [cite: 12]
-            case 2: statusText = '部長確認待ち'; percentage = 30; break; // [cite: 12]
-            case 3: statusText = '取締役確認待ち'; percentage = 40; break; // [cite: 12]
-            case 4: statusText = '常務確認待ち'; percentage = 50; break; // [cite: 12]
-            case 5: statusText = '専務確認待ち'; percentage = 60; break; // [cite: 12]
-            case 6: statusText = '社長確認待ち'; percentage = 70; break; // [cite: 12]
-            case 7: statusText = '総務確認待ち'; percentage = 85; break; // [cite: 12]
-            case 8: statusText = '確認完了'; percentage = 100; break; // [cite: 12]
-            case 9: statusText = '否認されました'; percentage = 10; break; // Status tambahan jika ada
-            default: statusText = 'ステータス不明'; percentage = 0;
+    // Loop melalui setiap langkah pada stepper
+    $('.chevron-stepper .step-item').each(function() {
+        const stepValue = parseInt($(this).data('step'));
+        
+        // Hapus semua class status terlebih dahulu
+        $(this).removeClass('active completed');
+
+        if (stepValue < currentStep) {
+            // Jika langkah ini sudah dilewati, tandai sebagai 'completed'
+            $(this).addClass('completed');
+        } else if (stepValue === currentStep) {
+            // Jika ini adalah langkah saat ini, tandai sebagai 'active'
+            $(this).addClass('active');
         }
-        updateProgressBar(statusText, percentage);
+    });
 
-        // Logika untuk enable/disable tombol berdasarkan status dan user
-        // Contoh: Tombol approve hanya bisa diklik oleh approver yang sesuai
-        // Tombol submit hanya bisa oleh predecessor jika belum diajukan
-        // Tombol edit field hanya jika statusnya draft atau dikembalikan ke predecessor
-        // Ini memerlukan info role pengguna saat ini dan siapa approver berikutnya.
+    // Kasus khusus jika statusnya "Selesai" (8)
+    if (currentStep === 8) {
+        $('.chevron-stepper .step-item').removeClass('active').addClass('completed');
     }
+}
 
     // Set nama pengguna yang login di header
     $('#loggedInUserName').text(`${loggedInUserName} (${typeof LOGGED_IN_USER_DEPARTMENT !== 'undefined' ? LOGGED_IN_USER_DEPARTMENT : '部署'})`);
